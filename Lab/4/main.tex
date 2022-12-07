@@ -1,0 +1,80 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 4}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section{Database Design and ER Model}
+
+This tutorial makes you prepared for the implementation part of Assignment 2. The following instructions are given as the business logic behind an insurance company management system.
+This insurance company has a few branches. Each branch has a manager and an assistant. There are also some other employees working at each branch. For each employee with a unique employee ID, we want to store their given name, surname, phone number, and address. There is an inbox assigned to each employee at the same branch where they work, with a 4-digit PIN code.
+
+The company offers car insurance, home insurance, and life insurance. For all the services, we want to store the insurance document information, too. Each document is identified with a unique ID. Other attributes that we store about a document depend on the type of insurance. For car insurance, we record plate number, vehicle model, color, and the release year. For home insurance, we keep track of address, surface, and build year. For life insurance, we save surname, given name, birth year, and SIN. Services are not restricted to a particular branch. Every branch has a name and a branch number. Each insurance profile has a unique ID, and we store its type, price, start date, and expiration date.
+
+A client is a person with a contract to get an insurance service. Each client has a unique ID. We also keep track of their surname, given name, age, address, and phone number. Be careful that these attributes are not redundant in having the same list for life insurance, since a client can sign a life insurance contract on someone's behalf like their children. Also, each client has an 8 characters password. The clients can log into the system and submit their reports. We only keep track of the text of that report and ignore the rest of the possible attributes for now. Each client can sign multiple contracts for different services and we should store the amount that they have paid for each service. One frequent query for a client would be choosing a branch name that they work with and extracting the information about that branch including the name of the manager or assistant and the type of services offered in that branch. You can assume that we do not plan to add any other plans to the services. The client will also look up the services that they are registered in (whether active or expired). 
+
+
+\subsection*{Q1} List the entities and relationships. Specify whether the entities are weak or strong. 
+\subsection*{Q2} Specify the attributes that you plan to assign to each entity, and the primary keys or foreign keys. 
+\subsection*{Q3} Draw the ER diagram for your design.
+
+% \fig{1}{op.png}{Relational algebra operators.}{rop}
+% \begin{itemize}[label=]
+%     \item
+% \end{itemize}
+
+% \begin{enumerate}[label=\alph*)]
+%     \item
+% \end{enumerate}
+
+    % \begin{table}[!ht]
+    %     \centering
+    %     \begin{tabular}{|c|c|c|c|}
+    %          \hline
+    %          s\_id& s\_name& age& rating\\
+    %          \hline
+    %     \end{tabular}
+    %     \caption{Sailors}
+    %     \label{tab:2}
+    % \end{table}
+
+
+% \question Write down sets in order of containment.
+
+% We pretend that equivalence classes are just numbers.
+% \[
+% 	\C \supset \R \supset \Q \supset \Z \supset \N \supset
+% 	\P \not\supset (\GF[7] = \modulo[7])  \supset \{\nil\}
+% \]
+
+% \question Find roots of $x^2- 8x = 9$.
+% \begin{align*}
+% goigre & & \\
+% guioshfg s& & \\
+% \end{align*}
+
+% We proceed by factoring,
+% \begin{align*}
+% 	x^2- 8x - 9     & = 9-9         &  & \text{Subtract 9 on both sides.}         \\
+% 	x^2- x + 9x - 9 & = 0           &  & \text{Breaking the middle term.}         \\
+% 	(x - 1)(x + 9)  & = 0           &  & \text{Pulling out common } (x - 1).      \\
+% 	x               & \in \{1, -9\} &  & f(x)g(x) = 0 \Ra f(x) = 0 \vee g(x) = 0. \\
+% \end{align*}
+
+% \fig{0.3}{diagram.jpg}{Cipher wheels.}{wheel}
+
+% \question Figure \ref{wheel} shows two cipher wheels. The left one is from Jeffrey Hoffstein, et al. \cite{hoffstein2008introduction} (pg. 3). Write a Python 3 program that uses it to encrypt: \texttt{FOUR SCORE AND SEVEN YEARS AGO}.
+
+% \lstinputlisting[language=Python, caption={Python 3 implementing figure \ref{wheel} left wheel.}, label=gcd]{code/prog.py}
+
+% We get: \texttt{KTZW XHTWJ FSI XJAJS DJFWX FLT}.
+
+% % citations
+% \bibliographystyle{plain}
+% \bibliography{citations}
+
+\end{document}

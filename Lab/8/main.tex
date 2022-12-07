@@ -1,0 +1,103 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 8}
+
+\graphicspath{{./pics/}}
+\usepackage{pdfpages}
+\begin{document} \maketitle
+
+\section*{Django Models}
+Please take the following steps:
+\begin{enumerate}[label=\roman*)]
+    \item Create a sample Django project. If you are using Docker, you can use the template of Week 6 as a starting point.
+    \item Add an app to your project by executing the following line in your terminal.
+    \begin{lstlisting}[language=bash]
+        python manage.py startapp flights
+\end{lstlisting}
+    On docker, you can go to \textit{Containers} tab, and open a terminal like the image below suggests.
+    \fig{1}{term.png}{open terminal to run Django commands.}{term}
+    \item go to \textit{settings.py} and add flights app to your installed apps.
+    \item go to \textit{models.py} in your flights app and add the following class:
+    \begin{itemize}
+        \item Flight ( origin, destination, duration ). The first two attributes should be of \textit{VARCHAR} equivalent type in Django, and duration should be \textbf{INTEGER} equivalent.
+    \end{itemize}
+    \item Execute the commands below to reflect new changes to your database:
+    \begin{lstlisting}[language=bash]
+        python manage.py makemigrations
+        python manage.py migrate
+\end{lstlisting}
+    \newpage
+    \item Now, register your \textit{settings.py} file then navigate your terminal to the interactive Python environment by executing:
+    \begin{lstlisting}[language=bash]
+        export DJANGO_SETTINGS_MODEUL=composeexample.settings
+        ipython
+\end{lstlisting}
+    \item In that environment you can execute Python code in real-time. first set up Django using:
+    \begin{lstlisting}[language=python]
+        import django
+        django.setup()
+        from flights.models import Flight
+\end{lstlisting}
+    \item In this environment, we can add new instances to our models that are directly reflected to the database.
+    Try to create a new instance of the class \textit{Flight} with $origin="New York"$, $destination="London"$, and $duration=415$. After that you can call \textit{save()} method to store it in your database.
+    \item Change the string representation of Flight class by overriding \textit{\_\_str\_\_} method and make it return this value for the instance you just created: \\
+    \{id\}: \{New York\} to \{London\}
+    \item Save a few more Flight instances of your choice, then try to print them all.
+    you have access to those instances via \textit{objects} property of the class. When you want to get all of them you can simply call \textit{all()} method.
+
+    \item Now, create another class called Airport with the schema as below:
+    \begin{itemize}
+        \item Airport (code, city)
+    \end{itemize}
+    Here, the code has three alphabetical characters. For instance, YUL stands for Montreal Pierre Elliott Trudeau International Airport. Also, change the string representation of Airport class to: \\
+    \{city\} (\{code\})
+
+    \item Afterward, change Flight model to take two Airports as its origin and destination. To update the table of Flights after deleting each airport, all of the records involved should be removed.
+    \item Django makes it possible to use foreign keys reversely. For instance, you should be able to find all of the Flights departing or arriving to a certain airport.
+    To do so you should use an input argument called \textit{related\_name} on the foreign key attribute. Assign departures and arrivals to origin and destination respectively. Before applying those changes to your database, make sure that you removed all of the rows from Flight class using \textit{delete()} method.
+    \item Now create some Airport instances listed below:
+    \begin{table}[h]
+        \begin{tabular}{|c|c|}
+        \hline
+         code & city\\
+         \hline
+         JFK & New York \\
+         LHR & London   \\
+         CDG & Paris    \\
+         NRT & Tokyo    \\ 
+        \hline
+        \end{tabular}
+    \end{table}
+    You should choose informative variable names for the airports because we want to use them for flight instances, too.
+    \item Now create some Flight instances as listed below:
+    \begin{table}[h]
+        \begin{tabular}{|c|c|c|}
+        \hline
+         origin & destination & duration\\
+         \hline
+         JFK & LHR & 415 \\
+         JFK & CDG & 435  \\ 
+        \hline
+        \end{tabular}
+    \end{table}
+    Now, use \textit{arrivals} to list all of the flights.
+    \item On the instance that you created for \textit{JFK} airport, use arrivals property to check how the reverse foreign key relation works.
+    \item You can also mimic SQL queries using Django \textit{filter()} method on the QuerySets of each Model. To test it, try to select all of the airport instances in "New York" city. Alternatively, you can use \textit{get} method in your python code but it produces an error when facing none or many instances with the criteria that you mention as input arguments.
+    \item Django has an intuitive way of handling many-to-many relationships. Create another class for passengers in the models.py which has first\_name, last\_name, and flights attributes. Here flights is a \textit{ManyToManyField} that stands for the relationship between the passengers and flights. This field also supports \textit{related\_name} input argument. give it the value \textit{passengers} to use it reversely.
+
+    \item After applying the latest changes to your database, register your models to the admin panel using \textit{admin.py}, then create a superuser through the terminal if you haven't already done that.
+    \begin{lstlisting}[language=bash]
+        python manage.py createsuperuser
+\end{lstlisting}
+    \item Now, populate your \textit{Passenger} model via admin panel.
+    \item Try to extract the passengers of each flight by using the reverse \textit{ManyToManyField}.
+\end{enumerate}
+
+\section*{References}
+This tutorial was prepared using the topics \textit{Django Models}, \textit{Migrations}, \textit{Shell}, and \textit{Many-to-Many Relationships} of
+\href{https://cs50.harvard.edu/web/2020/weeks/4/}{this video}. It is a good practice to go through it completely!
+\end{document}
+
+

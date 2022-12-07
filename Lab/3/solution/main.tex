@@ -1,0 +1,84 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 3}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section{Relational Algebra}
+
+
+\subsection*{Q1}
+\begin{itemize}[label=]
+    \item professor (\underline{prof\_name}, dept\_name)
+    \item department (\underline{dept\_name}, building)
+    \item committee (\underline{comm\_name}, \underline{prof\_name})
+\end{itemize}
+
+\begin{enumerate}[label=\alph*)]
+    \item
+    \[\Pi _{comm\_name}\left(committee\:\bowtie \:\left(\Pi _{prof\_name}\left(\sigma _{dept\_name='ECE'}\left(professor\right)\right)\right)\right)\]
+    \item 
+    \[\Pi _{prof\_name}\left(committee\:\bowtie \:\Pi _{comm\_name}\left(\sigma _{prof\_name='Smith'}\left(committee\right)\right)\right)\]
+\end{enumerate}
+
+\subsection*{Q2}
+Having the relation schema below for medical records, please answer the questions below using relational algebra.
+\begin{itemize}[label=]
+    \item patient(\underline{p\_id}, p\_name, address)
+    \item doctor(\underline{d\_id}, d\_name, hospital)
+    \item medicine(\underline{m\_id}, m\_name)
+    \item appointment(\underline{a\_id}, p\_id, d\_id, date)
+    \item prescription(\underline{a\_id}, \underline{m\_id})
+\end{itemize}
+\begin{enumerate}[label=\alph*)]
+    \item 
+    \[medicine\:\bowtie \:\Pi _{m\_id}\left(prescription\:\bowtie \:\Pi _{a\_id}\left(appointment\:\bowtie \:\Pi _{d\_id}\left(\sigma _{d\_name='Luis'}\left(doctor\right)\right)\right)\right)\]
+    \item 
+    \[\Pi _{p\_name,\:address}\left(patient\:\bowtie \:\Pi _{p\_id}\left(appointment\:\bowtie \:\Pi _{d\_id}\left(\sigma _{hospital='Garcia'}\left(doctor\right)\right)\right)\right)\]
+    \item
+    \[\Pi _{m\_name}\left(medicine\:\bowtie \:\Pi _{m\_id}\left(prescription\right)\right)\]
+    \item 
+    \[\Pi _{d\_name}\left(doctor\:\bowtie \:\Pi _{d\_id}\left(appointment\:\bowtie \:\Pi _{p\_id}\left(\sigma _{p\_name=d\_name}\left(patient\:\times doctor\right)\right)\right)\right)\]
+\end{enumerate}
+
+
+
+% \question Write down sets in order of containment.
+
+% We pretend that equivalence classes are just numbers.
+% \[
+% 	\C \supset \R \supset \Q \supset \Z \supset \N \supset
+% 	\P \not\supset (\GF[7] = \modulo[7])  \supset \{\nil\}
+% \]
+
+% \question Find roots of $x^2- 8x = 9$.
+% \begin{align*}
+% goigre & & \\
+% guioshfg s& & \\
+% \end{align*}
+
+% We proceed by factoring,
+% \begin{align*}
+% 	x^2- 8x - 9     & = 9-9         &  & \text{Subtract 9 on both sides.}         \\
+% 	x^2- x + 9x - 9 & = 0           &  & \text{Breaking the middle term.}         \\
+% 	(x - 1)(x + 9)  & = 0           &  & \text{Pulling out common } (x - 1).      \\
+% 	x               & \in \{1, -9\} &  & f(x)g(x) = 0 \Ra f(x) = 0 \vee g(x) = 0. \\
+% \end{align*}
+
+% \fig{0.3}{diagram.jpg}{Cipher wheels.}{wheel}
+
+% \question Figure \ref{wheel} shows two cipher wheels. The left one is from Jeffrey Hoffstein, et al. \cite{hoffstein2008introduction} (pg. 3). Write a Python 3 program that uses it to encrypt: \texttt{FOUR SCORE AND SEVEN YEARS AGO}.
+
+% \lstinputlisting[language=Python, caption={Python 3 implementing figure \ref{wheel} left wheel.}, label=gcd]{code/prog.py}
+
+% We get: \texttt{KTZW XHTWJ FSI XJAJS DJFWX FLT}.
+
+% % citations
+% \bibliographystyle{plain}
+% \bibliography{citations}
+
+\end{document}

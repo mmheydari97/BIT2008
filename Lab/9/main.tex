@@ -1,0 +1,264 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 9}
+
+\graphicspath{{./pics/}}
+\usepackage{pdfpages}
+\begin{document} \maketitle
+
+\section*{Django Admin}
+As you may have noticed, a Django project initially has an app called \textbf{Admin}. There is a separate file named \textit{admin.py} for us to configure and its URLs are managed under the \textit{'admin/'} path. You can use it to quickly add, delete, or edit any database model from a web interface only by registering those models. But, you can customize Django admin to take its capabilities to the next level.
+\\
+This tutorial aims to:
+\begin{itemize}
+    \item Add attribute columns in the model object list
+    \item Link between model objects
+    \item Add filters to the model object list
+    \item Make model object lists searchable
+    \item Modify the object edit forms
+    \item Override Django admin templates
+\end{itemize}
+
+\section*{Instructions}
+Please follow these step-by-step instructions:
+
+\begin{enumerate}[label=\roman*)]
+    \item Start with a sample Django project from Week 6 or create a new one. The command to start a new project is:
+    \begin{lstlisting}[language=bash]
+django-admin startproject <project name>
+\end{lstlisting}
+    
+    \item Now, if you are using Docker, run your containers via the command below:
+    \begin{lstlisting}[language=bash]
+docker compose up
+\end{lstlisting}
+    Then, add a new Django app to your project and create a superuser like below:
+    \begin{lstlisting}[language=bash]
+python manage.py startapp core
+python manage.py migrate
+python manage.py createsuperuser
+\end{lstlisting}
+    Up to this point, you can log into the admin panel of your project.
+    \item After adding a Django app, we should list it's name in \textit{settings.py} like below:
+    \begin{lstlisting}[language=python]
+INSTALLED_APPS = [
+'django.contrib.admin',
+'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.messages',
+'django.contrib.staticfiles',
+'core.apps.CoreConfig' # new line
+]
+\end{lstlisting}
+\newpage
+    \item After we have configured our app, we usually create our model classes. We want to create three models for \textbf{Person}, \textbf{Course}, and \textbf{Grade}.
+    Your \textit{models.py} should look like this:
+    \begin{lstlisting}[language=python]
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
+
+class Person(models.Model):
+    last_name = models.TextField()
+    first_name = models.TextField()
+    courses = models.ManyToManyField("Course", blank=True, related_name="students")
+
+    class Meta:
+        verbose_name_plural = "People"
+
+class Course(models.Model):
+    name = models.TextField()
+    year = models.IntegerField()
+
+    class Meta:
+        unique_together = ("name", "year", )
+
+class Grade(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    grade = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)])
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+\end{lstlisting}
+    There are a couple of new options used in our models implementation:
+    \begin{itemize}
+        \item We have a \href{https://docs.djangoproject.com/en/4.1/ref/models/options/}{Meta class} to add metadata to our models. \textit{verbose\_name} takes care of the human-readable name for the object when singular. by default Django uses \textbf{class name} as the \textit{verbose\_name} for the model \textbf{ClassName}. For the plural form, it adds "s" to the name that does not work for \textbf{Person}. As a result, we assigned \textbf{People} to \textit{verbose\_name\_plural}.
+        \item We have the option \textit{unique\_together} for a set of field names that, taken together, must be unique.
+        \item We have a list of default \href{https://docs.djangoproject.com/en/4.1/ref/validators/}{validators} in Django to maintain some criteria to the values that we want to insert into our database. In this project, we set a lower bound and an upper bound to the grades using \textbf{MinValueValidator} and \textbf{MaxValueValidator}. 
+    \end{itemize}
+    \item After the declaration of our models, we have to register them inside \textit{admins.py} to include them in the admin panel. So far, we use the most basic form to register our apps.
+    \begin{lstlisting}[language=python]
+from django.contrib import admin
+from . import models
+
+admin.site.register(models.Course)
+admin.site.register(models.Person)
+admin.site.register(models.Grade)
+\end{lstlisting}
+
+    \item Don't forget to reflect new changes to the database:
+    \begin{lstlisting}[language=bash]
+python manage.py makemigrations
+python manage.py migrate
+\end{lstlisting}
+    \item We can reach to the admin panel via \textit{http://localhost:8000/admin}. Right now if you try to add new instances to \textit{People} or any classes, they will not be displayed appropriately. To change that, we have to override the string representation of the classes. \textbf{Add} these lines to your models.
+    \\
+    \begin{lstlisting}[language=python]
+class Person(models.Model):
+    ...
+    def __str__(self):
+        return f"{self.last_name}, {self.first_name}"
+
+class Course(models.Model):
+    ...
+
+    def __str__(self):
+        return f"{self.name}, {self.year}"
+
+class Grade(models.Model):
+    ...
+
+    def __str__(self):
+        return f"{self.grade}, {self.person}, {self.course}"
+\end{lstlisting}
+    \item Implementing \_\_str\_\_() is a quick way to change the representation of a Person object from a meaningless string to understandable data. Since this representation will also show up in drop-downs and multi-selects, you definitely want to make it as easy to understand as possible.
+    
+    You can customize change list pages in far more ways than just modifying an object’s string representation. The \textit{list\_display} attribute of an \textit{admin.ModelAdmin} object specifies what columns are shown in the change list. This value is a tuple of attributes of the object being modeled. For example, in \textit{core/admin.py}, modify \textbf{PersonAdmin} as follows: (replace it with our simple registration of \textbf{Person})
+    \begin{lstlisting}[language=python]
+@admin.register(models.Person)
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ("last_name", "first_name")
+\end{lstlisting}
+    \item The \textit{list\_display} tuple can reference any attribute of the object being listed. It can also reference a method in the \textit{admin.ModelAdmin} itself. Modify \textbf{PersonAdmin} again:
+    \textbf{Person})
+    \begin{lstlisting}[language=python]
+from django.db.models import Avg
+
+
+@admin.register(models.Person)
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ("last_name", "first_name", "show_average")
+
+    def show_average(self, obj):
+        result = models.Grade.objects.filter(person=obj).aggregate(Avg("grade"))
+        return result["grade__avg"]
+
+    show_average.short_description = "Average Grade"
+\end{lstlisting}
+    
+    In the code above, you add a column to the admin that displays each student’s grade average. \textit{show\_average()} is called once for each object displayed in the list. The parameter \textit{obj} is the object of the row that is displayed. In this case, you use it to query the corresponding Grade objects for the student, with the response averaged over \textit{Grade.grade} and finally, \textit{short\_description} changes the displayed name of your new column.
+
+    \item Now, let us enhance the representation of \textbf{Course} class. It’s common for objects to reference other objects through the use of foreign keys. You can point \textit{list\_display} at a method that returns an HTML link. Now, replace the initial \textbf{Course} registry with the \textbf{CourseAdmin} snippet as follows:
+    \begin{lstlisting}[language=python]
+from django.utils.html import format_html
+from django.urls import reverse
+from django.utils.http import urlencode
+
+@admin.register(models.Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ("name", "year", "view_students_link")
+
+    def view_students_link(self, obj):
+        count = obj.students.count() # related_name
+        url = (
+            reverse("admin:core_person_changelist")
+            + "?"
+            + urlencode({"courses__id": f"{obj.id}"})
+        )
+        return format_html(f'<a href="{url}">{count} Students</a>')
+
+    view_students_link.short_description = "Students"
+\end{lstlisting}
+    In the code above, we use \textit{reverse()} to look up a URL in the Django admin. There is a convention to find any admin page but for now, we managed to create the URL address to redirect us the list of \textbf{Person} objects, filtered by desired course ID. We have to use \textit{format\_html} to use HTML links outside of our templates. 
+
+    \item Afterward, let us configure the Course admin page by adding a filter to the list screen. Add the line below to have \textit{list\_filter}:
+    \begin{lstlisting}[language=python]
+@admin.register(models.Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ("name", "year", "view_students_link")
+    list_filter = ("year", )
+    ...
+\end{lstlisting}
+    Now, you can only display the courses of the year that you are looking for.
+    
+    \item For the \textbf{Person} class, we can assign a \textit{search box} to filter its objects. Add the line below to implement the following:
+    You can customize more than just the change list page. The screens used to add or change an object are based on a ModelForm. Django automatically generates the form based on the model being edited.
+
+You can control which fields are included, as well as their order, by editing the fields option. Modify your PersonAdmin object, adding a field attribute:
+    \item You can customize more than just the change list page. The screens used to add or change an object are based on \textbf{ModelForm}. Django automatically generates the form based on the model being edited. You can control which fields are included, as well as their order, by editing the \textbf{fields} option. Modify your PersonAdmin object, adding a fields attribute to bring \textit{first name} before \textit{last name}:
+    \begin{lstlisting}[language=python]
+@admin.register(models.Person)
+class PersonAdmin(admin.ModelAdmin):
+    fields = ("first_name", "last_name", "courses")
+    ...
+\end{lstlisting}
+    \textbf{ModelAdmin.get\_form()} is responsible for creating \textbf{ModelForm} for your object. You can override this method to change the form. Add the following method to PersonAdmin to add labels to first-name text input:
+    \begin{lstlisting}[language=python]
+@admin.register(models.Person)
+class PersonAdmin(admin.ModelAdmin):
+    ...
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["first_name"].label = "First Name (Humans only!):"
+        return form
+    ...
+\end{lstlisting}
+    \item In some scenarios, changing the label might not be sufficient. On the other hand, we might not have access to, or want to change the model class to perform certain evaluations. Then we can use the form attribute to register a custom form with its own evaluations. Make the following additions and changes to \textit{admin.py}:
+    \begin{lstlisting}[language=python]
+from django import forms
+
+class PersonAdminForm(forms.ModelForm):
+    class Meta:
+        model = models.Person
+        fields = "__all__"
+
+    def clean_first_name(self):
+        if self.cleaned_data["first_name"] == "Spike":
+            raise forms.ValidationError("No Vampires")
+
+        return self.cleaned_data["first_name"]
+
+
+@admin.register(Person)
+class PersonAdmin(admin.ModelAdmin):
+    form = PersonAdminForm
+    ...
+\end{lstlisting}
+    \item You can fully customize the admin templates by changing or extending its default templates used to render pages. You can find all the templates used in the admin by looking inside the Django package. Let us customize the logout page. The relative path leading to the file must be the same as the overridden path. The file you’re interested in is \textbf{registration/logged\_out.html}. Start by creating the directory in the project's root directory and add it to \textit{settings.py}:
+    \begin{lstlisting}[language=python]
+TEMPLATES = [
+    {
+    ...
+        # Add the templates directory to the DIR option:
+        "DIRS": [os.path.join(BASE_DIR, "templates"), ],
+    ...
+    }
+]
+\end{lstlisting}
+    The template engine searches directories in the DIR option before the application directories, so anything with the same name as an admin template will be loaded instead. To see this in action, copy the \textbf{logged\_out.html} file into your \textbf{templates/registration} directory and then modify it to add these two paragraphs:
+    \begin{lstlisting}[language=HTML]
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></div>{% endblock %}
+
+{% block content %}
+
+<p>You are now leaving Sunnydale</p>
+
+<p><a href="{% url 'admin:index' %}">{% trans 'Log in again' %}</a></p>
+
+{% endblock %}
+\end{lstlisting}
+    
+    
+
+\end{enumerate}
+\section*{References}
+\begin{itemize}
+    \item The instructions to this session was brought from \href{https://realpython.com/customize-django-admin-python/}{this tutorial}.
+    \item If you wish to modify the admin panel of the Poll project (Lab 6), you can follow the instructions of \href{https://docs.djangoproject.com/en/4.1/intro/tutorial07/}{this tutorial}.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,60 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 10}
+
+\graphicspath{{./pics/}}
+\usepackage{pdfpages}
+\begin{document} \maketitle
+
+\section*{MongoDB}
+In this Session we practice supplementary MongoDB syntax. Follow the step-by-step instructions.
+\begin{enumerate}[label=\roman*)]
+    \item First, we want to import two collections into our database. There are two main formats namely \textit{BSON} and \textit{JSON}, to import/export data in MongoDB and many other technologies. You can learn more about those formats \href{https://www.mongodb.com/basics/bson}{here}. [\textbf{not} included in the course evaluation.]
+    We use the \textit{users} and \textit{movies} collections for this lab, and you can find them under "Lab 10/data" on Brightspace.
+    You may use a cloud cluster or a Docker container to set up your mongoshell. If you need a recap, you can find the instructions under "Week 12".
+    \begin{itemize}
+        \item If you are using the cluster, you have probably used a command like the following to initiate a connection:
+\begin{lstlisting}[language=bash]
+.\mongosh.exe "mongodb+srv://cluster0.frvrb0o.mongodb.net/<<db name>>" --apiVersion 1 --username <<user name>>             
+\end{lstlisting}
+    Now you can go to \href{https://www.mongodb.com/try/download/database-tools}{this download page} and scroll down to \textit{MongoDB Command Line Database Tools}. Consider Fig. \ref{dbtools} that shows the correct tool to download.
+    \fig{0.8}{dbtools.png}{Download command line tools.}{dbtools}
+    Afterward, you should extract the zip file from your project folder the same way you did for \textit{mongosh.exe}. Consequently, your project folder that you open your terminal in, should look like Fig. \ref{binfolder}. The files that we actually care about are underlined. 
+    \fig{0.3}{bin.png}{Project folder.}{binfolder}
+    Now, we are ready to import our collections into the database. You can use the command below to import \textit{users} and \textit{movies} collections. Please remember that it only shows the pattern of that command and that you should modify it to fit your URI (the connection link), database, username, etc.
+    \begin{lstlisting}[language=bash]
+.\mongorestore.exe "mongodb+srv://cluster0.frvrb0o.mongodb.net" --username admin --drop -d "Bit" -c "movies" .\movies.bson
+\end{lstlisting}
+
+    \newpage
+    When you successfully import those collections, you can find them as shown in Fig. \ref{check}. \textit{users} and \textit{movies} collections should contain 183 and 45993 documents, respectively.
+    \fig{0.8}{check.png}{Browsing your collections.}{check}
+    \item If you are using the Docker container solution, you should create a new folder for your project, then get \textit{docker-compose.yml} and \textit{Dockerfile} from Brightspace under "Week 12". Then put your BSON files in the same folder and do \textit{docker compose up} like before. After the containers run, execute the command below in a docker terminal from \textit{mongo} container:
+
+    \newpage
+    \begin{lstlisting}[language=bash]
+cd code 
+mongorestore --authenticationDatabase admin -u root --drop -d <<db name>> -c <<collection>> <<.bson file>>
+\end{lstlisting}
+    You should load \textit{movies} and \textit{users containers}. As you know, to run a mongoshell, you need to execute this command:
+    \begin{lstlisting}[language=bash]
+mongosh -u root -p example
+\end{lstlisting}
+You can open your browser to \href{http://localhost:8081/}{\textit{http://localhost:8081/}} to visually investigate the documents using MongoExpress, as shown in Fig. \ref{express}.
+\fig{0.8}{express.png}{Mongo Express showing the collections.}{express}
+    \end{itemize}
+
+\item You can limit the number of returned documents by calling \textit{aggregate} in your collection and passing \textit{\$limit} as an argument. Considering that, write a query to get 10 documents from the \textit{users} collection.
+\item You can define patterns to be looked up as query filters using the \textit{\$regex} argument. for instance \textit{\$regex:"com\$"}
+returns all the attribute values ending with "com". Having that in mind, write a query that counts the number of users whose email address is in \textit{@gameofthron.es} domain.
+\item The \textit{movies} collection has a array attribute for each document called \textbf{genres}. We can apply aggregation to elements of an array of attributes via \textit{\$unwind}. Using that operator, write a query that shows the name of those genres along with their occurrence descendingly ordered.
+
+\item Find the title of the movies that are \textit{released} from 1998 until 2015.
+
+\item You can use the dot operator to move to different inner attributes of a nested document. To test that, find movies with an IMDB score greater than 9 and show their casts.
+
+\item Remove \textit{plot} and \textit{fullplot} attributes from movie documents. This will reduce the size of your collection by half.
+\end{enumerate}
+\end{document}

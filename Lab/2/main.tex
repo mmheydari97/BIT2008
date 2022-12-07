@@ -1,0 +1,87 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 2}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section{SQL Basic Queries}
+\begin{enumerate}
+    \item Create two tables with names emp for employees and dept for departments.
+    \begin{itemize}
+        \item dept(\underline{deptno}, dname)
+        \item emp(\underline{eid}, ename, salary, deptno)
+    \end{itemize}
+Discuss what datatype to choose for each attribute.
+\item You are provided with \textit{dept\_data.sql} and \textit{emp\_data.sql} scripts. Populate your tables using those files.
+\item Write a script to show all the rows in \textit{emp} table.
+\item Write a script to show 5 of the employees who get more than 100 as their salary.
+\item Create another table for projects:
+\begin{itemize}
+    \item prj(\underline{pid}, pname)
+\end{itemize}
+Projects and employees have a many-to-many relationship. We want to keep track of employees who have an active role in projects using an intermediate table named \textit{prjmember}. What should the schema of the such table look like?
+\item Insert these projects into \textit{prj}:
+\begin{itemize}
+    \item Project 'A' having employees 'manager', 'b', and 'o' involved.
+    \item Project 'B' having employees 'a', 'b', 'c', and 'd' involved.
+    \item Project 'C' having employees 'a', and, 'f' involved.
+    \item Project 'D' having employees 'manager', 'f', 'h', 'i', and 'g' involved.
+\end{itemize}
+\item Change the name of project 'D' to 'E'.
+
+\item Write a script to show a list of employee names with their department name.
+
+\item Write a script to show a list of employee names who work in 'sales' or 'inventory' departments.
+
+\item Write a script to show a list of department names without any employees.
+
+\item Write a script to show the name, salary, and department number of the employees with the highest earnings in each department.
+
+\item Write a script to show a list of project names with fewer than 4 employees involved.
+
+\item Write a script to show the summation of salaries for the employees involved in project 'B'.
+
+\item Write a script to show a list of project names with the average salary of the employees involved in them.
+\end{enumerate}
+
+
+
+% \question Write down sets in order of containment.
+
+% We pretend that equivalence classes are just numbers.
+% \[
+% 	\C \supset \R \supset \Q \supset \Z \supset \N \supset
+% 	\P \not\supset (\GF[7] = \modulo[7])  \supset \{\nil\}
+% \]
+
+% \question Find roots of $x^2- 8x = 9$.
+% \begin{align*}
+% goigre & & \\
+% guioshfg s& & \\
+% \end{align*}
+
+% We proceed by factoring,
+% \begin{align*}
+% 	x^2- 8x - 9     & = 9-9         &  & \text{Subtract 9 on both sides.}         \\
+% 	x^2- x + 9x - 9 & = 0           &  & \text{Breaking the middle term.}         \\
+% 	(x - 1)(x + 9)  & = 0           &  & \text{Pulling out common } (x - 1).      \\
+% 	x               & \in \{1, -9\} &  & f(x)g(x) = 0 \Ra f(x) = 0 \vee g(x) = 0. \\
+% \end{align*}
+
+% \fig{0.3}{diagram.jpg}{Cipher wheels.}{wheel}
+
+% \question Figure \ref{wheel} shows two cipher wheels. The left one is from Jeffrey Hoffstein, et al. \cite{hoffstein2008introduction} (pg. 3). Write a Python 3 program that uses it to encrypt: \texttt{FOUR SCORE AND SEVEN YEARS AGO}.
+
+% \lstinputlisting[language=Python, caption={Python 3 implementing figure \ref{wheel} left wheel.}, label=gcd]{code/prog.py}
+
+% We get: \texttt{KTZW XHTWJ FSI XJAJS DJFWX FLT}.
+
+% % citations
+% \bibliographystyle{plain}
+% \bibliography{citations}
+
+\end{document}

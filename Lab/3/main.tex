@@ -1,0 +1,155 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 3}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section{Relational Algebra}
+Figure \ref{rop} shows some of the commonly used relational algebra operators.
+\fig{1}{op.png}{Relational algebra operators.}{rop}
+
+\subsection*{Q1} Having the relation schema below for committee member management, please answer the questions below using relational algebra.
+\begin{itemize}[label=]
+    \item professor (\underline{prof\_name}, dept\_name)
+    \item department (\underline{dept\_name}, building)
+    \item committee (\underline{comm\_name}, \underline{prof\_name})
+\end{itemize}
+
+\begin{enumerate}[label=\alph*)]
+    \item Project committee names having members from the "ECE" department.
+    \item Project the name of professors sharing at least one committee with Prof. "Smith".
+\end{enumerate}
+
+\subsection*{Q2}
+Having the relation schema below for medical records, please answer the questions below using relational algebra.
+\begin{itemize}[label=]
+    \item patient(\underline{p\_id}, p\_name, address)
+    \item doctor(\underline{d\_id}, d\_name, hospital)
+    \item medicine(\underline{m\_id}, m\_name)
+    \item appointment(\underline{a\_id}, p\_id, d\_id, date)
+    \item prescription(\underline{a\_id}, \underline{m\_id})
+\end{itemize}
+\begin{enumerate}[label=\alph*)]
+    \item Show those medicines that have been listed at least once in the prescriptions of Dr. "Luis".
+    \item Project the name and address of patients who have visited any doctors of "Garcia" hospital at least once.
+    \item Project the name of medicines that have been used in at least one prescription.
+    \item Assuming that all the names are unique, list the name of doctors who have visited another doctor. (In a scenario that doctor \textit{a} as a patient goes to doctor \textit{b}'s office, we want doctor \textit{b}'s name.)
+\end{enumerate}
+
+\section{Implementation}
+\subsection*{Q3}
+In this example, we deal with a Boat Reservation System. Please follow the step-by-step instructions using the code provided in instructions.sql.
+\begin{enumerate}[label=\alph*)]
+    \item Make sure you are on the right database using \textit{current\_database()} function.
+    \item Create sufficient tables for the schema below:
+    \begin{itemize}[label=]
+        \item sailor(\underline{s\_id}, s\_name, age, rating)
+        \item boat(\underline{b\_id}, b\_name, color)
+        \item reserve(\underline{s\_id}, \underline{b\_id}, \underline{r\_date})
+    \end{itemize}
+    For convenience, the code to create a table for Sailors is provided. Please 
+    create the tables one by one.
+    
+    \item Insert sailors and boats instances as Tables \ref{tab:1} and \ref{tab:2} below. The command to insert the first row is provided.
+    \begin{table}[!ht]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+             \hline
+             s\_id& s\_name& age& rating\\
+             \hline
+             1& James& 45& 10\\
+             \hline
+             2& Mary& 36& 5\\
+             \hline
+             3& Robert& 50& 9\\
+             \hline
+             4& Patricia& 34& 8\\
+             \hline
+             5& John& 24& 2\\
+             \hline
+             6& Jennifer& 20& 2\\
+             \hline
+             7& Michael& 20& 10\\
+             \hline
+             8& Linda& 35& 3\\
+             \hline
+             9& David& 58& 10\\
+             \hline
+             10& Elizabeth& 55& 5\\
+             \hline
+        \end{tabular}
+        \caption{Sailors}
+        \label{tab:1}
+
+        \begin{tabular}{|c|c|c|}
+             \hline
+             b\_id& b\_name& color\\
+             \hline
+             1& Serendipity& Blue\\
+             \hline
+             2& Imagination& Red\\
+             \hline
+             3& Liberty& Blue\\
+             \hline
+             4& Wanderlust& Green\\
+             \hline
+             5& Gale& Blue\\
+             \hline
+             6& Zephyr& Green\\
+             \hline
+        \end{tabular}
+        \caption{Boats}
+        \label{tab:2}
+    \end{table}
+
+    \item Make sure that the rows are inserted correctly by selecting all the values from each table.
+
+    \item Insert reservation records based on the code provided.
+    \item List the IDs of sailors who had at least one trip on the boat with ID 3. You only need \textit{reserve} table for this query.
+    \item Now list the name of the sailors that you listed in previous query. Their names are listed in \textit{sailor} table. Use your previous query to check the WHERE condition.
+    \item We have two new Sailors who have not been on a trip yet. List their names.
+    \item List all the sailor IDs who have been on a trip with a red or green boat. Use keyword DISTINCT to remove duplicates from your result.
+    \item We have a sailor who likes red boats and does not like green boats. Write a query to find their name. You may find the keyword EXCEPT handy to implement set difference. 
+    
+\end{enumerate}
+
+
+% \question Write down sets in order of containment.
+
+% We pretend that equivalence classes are just numbers.
+% \[
+% 	\C \supset \R \supset \Q \supset \Z \supset \N \supset
+% 	\P \not\supset (\GF[7] = \modulo[7])  \supset \{\nil\}
+% \]
+
+% \question Find roots of $x^2- 8x = 9$.
+% \begin{align*}
+% goigre & & \\
+% guioshfg s& & \\
+% \end{align*}
+
+% We proceed by factoring,
+% \begin{align*}
+% 	x^2- 8x - 9     & = 9-9         &  & \text{Subtract 9 on both sides.}         \\
+% 	x^2- x + 9x - 9 & = 0           &  & \text{Breaking the middle term.}         \\
+% 	(x - 1)(x + 9)  & = 0           &  & \text{Pulling out common } (x - 1).      \\
+% 	x               & \in \{1, -9\} &  & f(x)g(x) = 0 \Ra f(x) = 0 \vee g(x) = 0. \\
+% \end{align*}
+
+% \fig{0.3}{diagram.jpg}{Cipher wheels.}{wheel}
+
+% \question Figure \ref{wheel} shows two cipher wheels. The left one is from Jeffrey Hoffstein, et al. \cite{hoffstein2008introduction} (pg. 3). Write a Python 3 program that uses it to encrypt: \texttt{FOUR SCORE AND SEVEN YEARS AGO}.
+
+% \lstinputlisting[language=Python, caption={Python 3 implementing figure \ref{wheel} left wheel.}, label=gcd]{code/prog.py}
+
+% We get: \texttt{KTZW XHTWJ FSI XJAJS DJFWX FLT}.
+
+% % citations
+% \bibliographystyle{plain}
+% \bibliography{citations}
+
+\end{document}

@@ -1,0 +1,404 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 6}
+
+\graphicspath{{./pics/}}
+\usepackage{pdfpages}
+\begin{document} \maketitle
+
+\section*{Django}
+\subsection*{Checkpoint 1}
+In this session, we build a sample project using Django and show how it evolves. The instructions file has several checkpoints and what you implement by the end of each checkpoint should work. First, make your python environment ready. If you are using the docker container, extract docker.zip into a folder. Specify the Django version in requirements.txt using \textbf{$Django>=4.0$}. Then run \textit{docker compose up} to launch the server. Now, open \textit{localhost:8000} in your browser to make sure that the Django server works fine. Open a terminal with Conda available. If you are using docker, go to containers and open a terminal from \textit{web} as shown in Fig. \ref{term}.
+\fig{1}{term.png}{open terminal to run Django commands.}{term}\\
+Then run the command below in the terminal that you opened.
+
+\begin{lstlisting}[language=bash]
+python manage.py startapp polls
+\end{lstlisting}
+
+After making sure that the new app is created correctly, open the file \textit{polls/views.py}. We implement the functionalities of our application with views. Let's put the following Python code to create a simple function-based view.
+\begin{lstlisting}[language=Python]
+from django.http import HttpResponse
+
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
+\end{lstlisting}
+ 
+Now, we need to define the routing of our project to use our views. We assign different views to the paths that the users may enter in their address bar. It makes it more modular and scalable to handle the routing of each application with a separate urls.py in each application directory. To do so, create \textit{urls.py} for the polls application and configure it as follows.
+\begin{lstlisting}[language=Python]
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+\end{lstlisting}
+This code maps empty path strings to our index view. We need to determine when to use the views of polls application after all.
+Consequently, we should link the paths of the polls application to the main urls.py of the \textbf{project}. Change your project urls.py in a way that includes polls/urls.py routing as follows.
+\begin{lstlisting}[language=Python]
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('polls/', include('polls.urls')),
+    path('admin/', admin.site.urls),
+]
+\end{lstlisting}
+By using \textit{include}, we tell Django admin to resolve paths starting with \textit{polls} with the rules that we defined in our polls app urls.py. 
+Go to \textit{http://localhost:8000/polls/} in your browser, and you should see the text “Hello, world. You’re at the polls index.”, which you defined in the index view.
+
+\subsection*{Checkpoint 2}
+First off, run the command below inside your Django terminal to make sure that the database connection is working fine.
+\begin{lstlisting}[language=bash]
+python manage.py migrate
+\end{lstlisting}
+To implement more complex functionalities, we need to fetch data from our database. As the MTV design pattern suggests, we code in models.py to interact with our database through Django. Create models for polls application by modifying \textit{models.py} as below.
+\begin{lstlisting}[language=Python]
+from django.db import models
+
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+\end{lstlisting}
+\newpage
+To make Django detect our applications, we should add them to \textbf{INSTALLED\_APPS} in project \textit{settings.py}. You can simply include the name \textit{polls}, or use another syntax which is more professional. Add another item to ISTALLED\_APPS to make it look like this:
+\begin{lstlisting}[language=Python]
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'polls.apps.PollsConfig',
+]
+\end{lstlisting}
+
+Now Django knows to include the polls app. Let’s run another command to map our models to the database:
+\begin{lstlisting}[language=bash]
+python manage.py makemigrations polls
+python manage.py migrate
+\end{lstlisting}
+One of the advantages of abstraction available in Python and other object-oriented languages is that we do not have to worry about every little detail unless we need to change it. There are many behaviors handled for our models just by inheriting from \textit{models.Model}, however, we want to change the textual representation of our models now. 
+It’s important to add \_\_str\_\_() methods to your models, not only for your own convenience but also because objects’ representations are used throughout Django’s automatically-generated admin panel. Add following code to change those representations:
+\begin{lstlisting}[language=Python]
+from django.db import models
+
+class Question(models.Model):
+    # ...
+    def __str__(self):
+        return self.question_text
+
+class Choice(models.Model):
+    # ...
+    def __str__(self):
+        return self.choice_text
+\end{lstlisting}
+Let's also add a custom functionality to our Question model:
+\begin{lstlisting}[language=Python]
+import datetime
+
+from django.db import models
+from django.utils import timezone
+
+
+class Question(models.Model):
+    # ...
+    def was_published_recently(self):
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+\end{lstlisting}
+
+\newpage
+Now, create a admin for your website to run polls. To do so, run the following commands in the terminal:
+\begin{lstlisting}[language=bash]
+python manage.py createsuperuser
+Username: admin
+Email address: admin@admin.com
+Password: admin
+Password (again): admin
+Bypass password validation and create user anyway? [y/N]: y
+\end{lstlisting}
+We also need to register our models to be included in the admin panel. To do this, open the \textit{polls/admin.py} file, and edit it to look like this:
+\begin{lstlisting}[language=Python]
+from django.contrib import admin
+from .models import Question, Choice
+
+admin.site.register(Question)
+admin.site.register(Choice)
+\end{lstlisting}
+ 
+Now, try logging in admin panel available in \textit{localhost:8000/admin}, with the superuser account you created in the previous step. You can add some instances using the Django admin page as shown in Fig \ref{admin}.
+\fig{1}{admin.png}{this is how the admin panel looks.}{admin}
+
+\subsection*{Checkpoint 3}
+First, let’s add a few more views to \textit{polls/views.py}. These views are slightly different because they take an argument:
+\begin{lstlisting}[language=Python]
+def detail(request, question_id):
+    return HttpResponse("You're looking at question %s." % question_id)
+
+def results(request, question_id):
+    response = "You're looking at the results of question %s."
+    return HttpResponse(response % question_id)
+
+def vote(request, question_id):
+    return HttpResponse("You're voting on question %s." % question_id)
+\end{lstlisting}
+
+\newpage
+Again, we have to create the routing to use those views. Your \textit{polls/urls.py} should look like this:
+\begin{lstlisting}[language=Python]
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    # ex: /polls/
+    path('', views.index, name='index'),
+    # ex: /polls/5/
+    path('<int:question_id>/', views.detail, name='detail'),
+    # ex: /polls/5/results/
+    path('<int:question_id>/results/', views.results, name='results'),
+    # ex: /polls/5/vote/
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+]
+\end{lstlisting}
+Assume that we want to show the latest polls of our website on the index page. Following code enables us to do that easily:
+\begin{lstlisting}[language=python]
+from django.http import HttpResponse
+
+from .models import Question
+
+
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    output = ', '.join([q.question_text for q in latest_question_list])
+    return HttpResponse(output)
+
+# Leave the rest of the views (detail, results, vote) unchanged
+\end{lstlisting}
+The problem with this implementation is that we mixed the representation side of the project with the functionality. To avoid that you should create \textit{polls/templates/polls/index.html} file to develop a template. Write following lines to index.html:
+\begin{lstlisting}[language=HTML]
+{% if latest_question_list %}
+    <ul>
+    {% for question in latest_question_list %}
+        <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+\end{lstlisting}
+Then, update your app's \textit{view.py} to use the template that you created. We use \textit{render} to save some lines of code:
+\begin{lstlisting}[language=Python]
+from django.shortcuts import render
+
+from .models import Question
+
+
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    context = {'latest_question_list': latest_question_list}
+    return render(request, 'polls/index.html', context)
+\end{lstlisting}
+ 
+Now, let’s create a view to address question details – the page that displays the question text for a given poll. We use another shortcut called \textit{get\_object\_or\_404()} to create the view below:
+\begin{lstlisting}[language=Python]
+from django.shortcuts import get_object_or_404, render
+
+from .models import Question
+# ...
+def detail(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/detail.html', {'question': question})
+\end{lstlisting}
+
+Then, you can handle the template by creating \textit{./polls/templates/polls/detail.html}
+and fill it with:
+\begin{lstlisting}[language=HTML]
+<h1>{{ question.question_text }}</h1>
+<ul>
+{% for choice in question.choice_set.all %}
+    <li>{{ choice.choice_text }}</li>
+{% endfor %}
+</ul>
+\end{lstlisting}
+The current problem with our index.html is that we included hard-coded URLs in the file:
+\begin{lstlisting}[language=Python]
+<li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+\end{lstlisting}
+Since we name the URL mappings, we can use them to make our templates loosely coupled. In other words, if want to change a file, we do not like other files to be affected and make the maintenance of our website costy. As a result change index.html like this:
+\begin{lstlisting}[language=HTML]
+<li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+\end{lstlisting}
+Then assign the name that you used in \textit{polls/urls.py}:
+\begin{lstlisting}[language=Python]
+path('<int:question_id>/', views.detail, name='detail'),
+\end{lstlisting}
+This way, if we want to change the routing of our application in urls.py, we do not have to worry about the URLs affected in our templates.
+We also want to be more explicit about the namespacing of our project. We already did that by creating \textit{polls/templates/polls} that makes us specify the application name every time we want to name a template. Now change the urls.py to look like this:
+\begin{lstlisting}[language=Python]
+from django.urls import path
+
+from . import views
+
+app_name = 'polls'
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('<int:question_id>/', views.detail, name='detail'),
+    path('<int:question_id>/results/', views.results, name='results'),
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+]
+\end{lstlisting}
+Now change your polls/index.html template to the one below to point at the namespaced detail view:
+\begin{lstlisting}[language=HTML]
+<li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+\end{lstlisting}
+ 
+\subsection*{Checkpoint 4}
+We need to create a minimal form to be able to perform voting in the polls. Let's update our poll detail template like below:
+\begin{lstlisting}[language=HTML]
+<form action="{% url 'polls:vote' question.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ question.question_text }}</h1></legend>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    {% endfor %}
+</fieldset>
+<input type="submit" value="Vote">
+</form>
+\end{lstlisting}
+Now, let's implement a real voting functionality by adding its view:
+\begin{lstlisting}[language=Python]
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+
+from .models import Choice, Question
+# ...
+def vote(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        # Redisplay the question voting form.
+        return render(request, 'polls/detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+\end{lstlisting}
+After somebody votes on a question, the vote() view redirects to the results page for the question. Let’s write that view:
+\begin{lstlisting}[language=Python]
+from django.shortcuts import get_object_or_404, render
+
+
+def results(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/results.html', {'question': question})
+\end{lstlisting}
+
+\newpage
+There is some redundancy if you compare the code for the results view and the detail view. We will fix that soon. For now, let's create the \textit{resutls.html} template:
+\begin{lstlisting}[language=Python]
+<h1>{{ question.question_text }}</h1>
+
+<ul>
+{% for choice in question.choice_set.all %}
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+\end{lstlisting}
+To avoid redundancy, there are some generic views, available as classes to cover the typical functionalities that we need most. Let's update our views as shown below:
+\begin{lstlisting}[language=Python]
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+from django.views import generic
+
+from .models import Choice, Question
+
+
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Question.objects.order_by('-pub_date')[:5]
+
+
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
+
+
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
+
+
+def vote(request, question_id):
+    ... # same as above, no changes needed.
+\end{lstlisting}
+
+\newpage
+When we use class based views, we need to update our URL matchings, too:
+\begin{lstlisting}[language=Python]
+from django.urls import path
+
+from . import views
+
+app_name = 'polls'
+urlpatterns = [
+    path('', views.IndexView.as_view(), name='index'),
+    path('<int:pk>/', views.DetailView.as_view(), name='detail'),
+    path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+]
+\end{lstlisting}
+\subsection*{Checkpoint 5}
+Finally, let's do some minimal modifications to the looks of our project. Let's create \textit{polls/static/polls/style.css} file to change the visual attributes of our templates:
+\begin{lstlisting}[language=HTML]
+li a {
+    color: green;
+}
+\end{lstlisting}
+To load this file in our \textit{index.html} template, we should add following lines:
+\begin{lstlisting}[language=Python]
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+\end{lstlisting}
+
+\subsection*{References}
+This tutorial was made using \href{https://docs.djangoproject.com/en/4.1/intro/tutorial01/}{Django official tutorial}. You can find more details about each checkpoint or explore other parts of the tutorial if you wish.
+
+\begin{itemize}
+    \item \href{https://docs.djangoproject.com/en/4.1/intro/tutorial01/}{checkpoint 1}
+    \item \href{https://docs.djangoproject.com/en/4.1/intro/tutorial02/}{checkpoint 2}
+    \item \href{https://docs.djangoproject.com/en/4.1/intro/tutorial03/}{checkpoint 3}
+    \item \href{https://docs.djangoproject.com/en/4.1/intro/tutorial04/}{checkpoint 4}
+    \item \href{https://docs.djangoproject.com/en/4.1/intro/tutorial06/}{checkpoint 5}
+\end{itemize}
+\end{document}
