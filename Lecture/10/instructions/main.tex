@@ -1,0 +1,64 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{MongoDB}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section*{Online Server}
+In this option, we run a MongoDB engine on Atlas, then we have a couple of options to connect to it. To begin with, you can watch the instructions in \href{https://youtu.be/2QQGWYe7IDU?t=224}{this video} until 5:51. Up to that point, you have created an account on the official website, and set a cluster to run your database. Now, as Fig. \ref{connect} suggests, click on connect to see those options.
+\fig{0.9}{connect.png}{Trying to connect to online MongoDB engine.}{connect}
+
+Afterward, choose the first option as Fig. \ref{mongosh} demonstrates. Then, assuming that you do not have a MongoDB shell installed, you should click to download the version that is shown in the prompt (item 1). You do not have to go through the second item which is adding the file to your path. Instead, extract the file that you just downloaded into a folder of your choice, then open PowerShell to that folder, change your directory to find \textbf{mongosh} in \textit{bin} folder, and run the third item with the replacements that are needed for the command to fit your scenario. Basically, the name of the database, and the username may vary from case to case. Also, the username and password that you need to use here, are the same as what you created under \textit{Database Access}.
+Finally, you can type in your MongoDB commands inside this shell and it runs on your online cluster of yours.
+
+Please feel free to follow the rest of the video as far as you wish to find a more convenient way.
+\fig{0.9}{mongoshell.png}{Choosing MongoDB shell option.}{mongosh}
+
+\newpage
+\section*{Docker}
+You can create your own Docker container to run MongoDB. First, you need to create a \textit{docker-compose.yml} file in a new folder. As you know, this file contains the configurations of the containers. It should look like the code sheet below. The file is also shared with you on BrightSpace.
+\begin{lstlisting}[language=bash]
+version: '3.8'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./data/db:/data/db
+      - ./:/code/
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+\end{lstlisting}
+Then, you should open a Powershell with the same directory as the docker-compose.yml file, leave the docker desktop application open, and type
+\begin{lstlisting}[language=bash]
+docker compose up
+\end{lstlisting}
+Then you have two options. First, there is \textit{mongo-express} container that you can click on and choose \textbf{open with browser} or, like previous containers you can open a terminal to \textbf{mongo} container as Fig. \ref{docker} shows.
+\fig{0.9}{docker.png}{Opening a terminal to MongoDB container.}{docker}
+For our lectures, we use the terminal mode and all that you need to do is execute the command below:
+\begin{lstlisting}[language=bash]
+mongosh -u root -p example
+\end{lstlisting}
+The username and password can be modified via the \textit{docker-compose.yml} file.
+\newline\\
+\textbf{**} Please note that these instructions or any other instructions that are meant to set up our programming environment are \textbf{not} a part of course evaluation.
+\end{document}

@@ -1,0 +1,92 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Lab 1}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section{SQL Setup}
+This is an easy and safe way to create an isolated environment to do the coding for this course. Please follow these steps:
+\begin{enumerate}
+    \item Download Oracle VirtualBox application for free, using \href{https://www.virtualbox.org/wiki/Downloads}{this link}.
+    \fig{0.8}{vb.png}{VirtualBox download page.}{vb}
+    The installation process is rather straight forward.
+    
+    \item Download Ubuntu image from \href{https://ubuntu.com/download/desktop}{this link}.
+    \fig{0.8}{ubuntu.png}{Ubuntu dowload page.}{ubuntu}
+    
+    \item Run VirtualBox. Then click on New as shown in Fig.\ref{vm1}.
+    \fig{0.8}{vm1.png}{New virtual machine.}{vm1}
+    
+    \item Specify the machine name and folder as shown in Fig.\ref{vm2}.
+    \fig{0.5}{vm2.png}{VM location.}{vm2}
+
+    \item Move Ubuntu image to the machine folder recently created at the directory that you specified.
+    \item Assign a memory size on the green spectrum as shown in Fig.\ref{vm3}.
+    \fig{0.5}{vm3.png}{Memory size.}{vm3}
+    
+    \item Stick to the defaults until you can specify the storage as shown in Fig.\ref{vm4}.
+    \fig{0.5}{vm4.png}{Storage size.}{vm4}
+    
+    \item Click on the Settings tab as shown in Fig.\ref{vm5}.
+    \fig{0.5}{vm5.png}{VM settings.}{vm5}
+    
+    \item Change these options to improve performance based on your system specifications as shown in Fig.\ref{vm6}.
+    \fig{0.5}{vm6.png}{VM settings parameters.}{vm6}
+    
+    \item Press start and choose the disk image that you moved to the machine folder. Wait for the image to boot then choose "Try or install Ubuntu".
+    
+    \item Proceed with the installation. Choose extra software to be installed as shown in Fig.\ref{vm7}.
+    \fig{0.5}{vm7.png}{VM extra software installation.}{vm7}
+    
+    \item After the installation is complete, power off the VM, remove the disk image as shown in Fig.\ref{vm8}, and then start the VM again.
+    \fig{0.5}{vm8.png}{Remove disk image.}{vm8}
+    
+    \item Next, install PostgreSQL using \href{https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/}{this link}.
+    \item Now create your user based on the OS username so you have easier terminal access.
+    \newpage
+    \lstinputlisting[language=SQL, caption={psql commands.}, label=code]{code/code.tex}
+    \item Finally, continue install pgAdmin4 web interface and try to connect to your database following \href{https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/}{this link}.
+    
+\end{enumerate}
+
+
+
+% \question Write down sets in order of containment.
+
+% We pretend that equivalence classes are just numbers.
+% \[
+% 	\C \supset \R \supset \Q \supset \Z \supset \N \supset
+% 	\P \not\supset (\GF[7] = \modulo[7])  \supset \{\nil\}
+% \]
+
+% \question Find roots of $x^2- 8x = 9$.
+% \begin{align*}
+% goigre & & \\
+% guioshfg s& & \\
+% \end{align*}
+
+% We proceed by factoring,
+% \begin{align*}
+% 	x^2- 8x - 9     & = 9-9         &  & \text{Subtract 9 on both sides.}         \\
+% 	x^2- x + 9x - 9 & = 0           &  & \text{Breaking the middle term.}         \\
+% 	(x - 1)(x + 9)  & = 0           &  & \text{Pulling out common } (x - 1).      \\
+% 	x               & \in \{1, -9\} &  & f(x)g(x) = 0 \Ra f(x) = 0 \vee g(x) = 0. \\
+% \end{align*}
+
+% \fig{0.3}{diagram.jpg}{Cipher wheels.}{wheel}
+
+% \question Figure \ref{wheel} shows two cipher wheels. The left one is from Jeffrey Hoffstein, et al. \cite{hoffstein2008introduction} (pg. 3). Write a Python 3 program that uses it to encrypt: \texttt{FOUR SCORE AND SEVEN YEARS AGO}.
+
+% \lstinputlisting[language=Python, caption={Python 3 implementing figure \ref{wheel} left wheel.}, label=gcd]{code/prog.py}
+
+% We get: \texttt{KTZW XHTWJ FSI XJAJS DJFWX FLT}.
+
+% % citations
+% \bibliographystyle{plain}
+% \bibliography{citations}
+
+\end{document}

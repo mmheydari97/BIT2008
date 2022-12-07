@@ -1,0 +1,65 @@
+use('Bit');
+
+db.sales.drop();
+
+db.sales.insertMany([
+  { '_id': 1, 'item': 'abc', 'price': 10, 'quantity': 2, 'date': new Date('2014-03-01') },
+  { '_id': 2, 'item': 'jkl', 'price': 20, 'quantity': 1, 'date': new Date('2014-03-01T09:00:00Z') },
+  { '_id': 3, 'item': 'xyz', 'price': 5, 'quantity': 10, 'date': new Date('2014-03-15') },
+  { '_id': 4, 'item': 'xyz', 'price': 5, 'quantity':  20, 'date': new Date('2014-04-04T11:21:39.736Z') },
+  { '_id': 5, 'item': 'abc', 'price': 10, 'quantity': 10, 'date': new Date('2014-04-04T21:23') },
+  { '_id': 6, 'item': 'def', 'price': 7.5, 'quantity': 5, 'date': new Date('2015-06-04T05:08:13Z') },
+  { '_id': 7, 'item': 'def', 'price': 7.5, 'quantity': 10, 'date': new Date('2015-09-10T08:43:00Z') },
+  { '_id': 8, 'item': 'abc', 'price': 10, 'quantity': 5, 'date': new Date('2016-02-06T20:20:13Z') },
+]);
+
+db.sales.find();
+db.sales.find({},{'item':1, 'price':1, 'quantity':1});
+db.sales.find({'item':{$regex: '^a'}});
+db.sales.find({'quantity':5},{'item':1});
+
+db.sales.find({$or:[{'quantity':20}, {'price':20}]});
+db.sales.find({'date': {$gte: new Date('2014-01-01'), $lt: new Date('2015-01-01')}});
+db.sales.find({'item':/^a/});
+
+db.sales.updateMany({},{$set: {'join_date': new Date()}});
+db.sales.updateMany({},{$unset: {'date':1}});
+db.sales.updateMany({'item':'abc'},{$inc: {'quantity':5}})
+
+db.sales.deleteMany({'price':{$gte:10}});
+
+
+db.sales.aggregate([
+ { $group: { _id: '$item', totalQuantity: { $sum: '$quantity'}}},
+ { $match: {totalQuantity: {$gt: 1}}}
+]);
+
+db.sales.aggregate([
+ { $group: { _id: {'itm_year': {$year: '$date'}},
+ totalQuantity: {$sum:'$quantity'}}}
+ ]);
+
+db.sales.aggregate([
+ { $group: { _id: {'item': '$item', 'itm_date': 
+                                    {'month': {$month: '$date'},
+                                     'day': {$dayOfMonth: '$date'},
+                                     'year': {$year: '$date'}
+                                    }}}},
+ { $group: {_id: null, count: {$sum: 1}}}
+]);
+
+const aggregation = [
+  { $group: { _id: '$item', totalSaleAmount: { $sum: { $multiply: [ '$price', '$quantity' ]}}}},
+  { $match: {'totalSaleAmount': {$gte: 100}}},
+  { $sort: {'totalSaleAmount': 1}}
+];
+
+const aggregation = [
+  { $match: { date: { $gte: new Date('2014-01-01'), $lt: new Date('2015-01-01') } } },
+  { $group: { _id: '$item', totalSaleAmount: { $sum: { $multiply: [ '$price', '$quantity' ]}}}},
+  { $sort: {'totalSaleAmount': -1}}
+];
+db.sales.aggregate(aggregation);
+
+// unwind
+// https://www.mongodb.com/docs/manual/reference/operator/aggregation/unwind/

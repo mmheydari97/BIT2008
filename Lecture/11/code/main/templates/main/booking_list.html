@@ -1,0 +1,16 @@
+<h2>
+    Bookings
+</h2>
+<table>
+    <tr>
+        <th>Member</th>
+        <th>Book</th>
+        <th>Exipration Date</th>
+    </tr>
+    {% for booking in object_list %}
+    <tr>
+    <td>{{booking.member}}</td> <td>{{ booking.book }}</td> <td>{{booking.expiration_date}}</td>
+    </tr>
+{% endfor %}
+</table>
+<a href="{% url 'main:create_booking' %}"> add </a>

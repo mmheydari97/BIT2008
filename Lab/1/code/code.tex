@@ -1,0 +1,8 @@
+echo $USER
+sudo su - postgres
+psql
+
+CREATE USER testuser WITH PASSWORD '1234';
+-- ALTER USER testuser WITH PASSWORD 'newpassword';
+ALTER USER testuser WITH SUPERUSER;
+
