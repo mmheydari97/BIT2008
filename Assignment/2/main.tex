@@ -1,0 +1,44 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Assignment 2}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section*{Entity Relationship Model \& Normalization}
+\question Please explain what a weak entity is, and how we should identify its records. (5 points)
+
+
+\question Please explain how we can implement a trinary relationship using multiple binary relationships. (5 points)
+
+\question We have a relation $R=(A, B, C, D, E, F, G)$ and its functional dependency set as below.
+\[F=\{A\rightarrow B,\:BC\:\rightarrow \:DE,\:AEF\:\rightarrow \:G,\:E\rightarrow \:C,\:A\rightarrow \:E\}\]
+Please write down 4 members of $F^+$ mentioning which Armstrong's axioms you used to conclude each of them. (10 points) 
+
+\question Consider the relation scheme $R=(E, F, G, H, I, J, K, L, M, N)$ and the set of functional dependencies as below.
+\[F=\{EF\rightarrow G,\:F\rightarrow IJ,\:EH\rightarrow KL,\:K\rightarrow M,\:\:L\rightarrow N\}\]
+Please write down $(EFH)^+$ and explain whether $EFH$ is a candidate key. (10 points)
+
+\question Please find the canonical cover of $F=\{A\rightarrow BC, B\rightarrow AC, C\rightarrow AB\}$ explaining the steps of your process. (5 points)
+
+\question Having the relation $R=(A, B, C, D, E)$ and functional dependency set $F=\{ AB \rightarrow CD, D\rightarrow E, A\rightarrow C, B\rightarrow D\}$, please find the BCNF decomposition of R, and determine if the decomposition is dependency-preserving. (10 points)
+
+\question Having the relation $R=(A, B, C, D, E, F, G, H)$ and the functional dependency set \\
+$F=\{A \rightarrow CD, ACF \rightarrow G, AD \rightarrow BEF, BCG \rightarrow D, CF \rightarrow AH,  CH \rightarrow G, D \rightarrow B,  H \rightarrow DEG \}$,\\ please find the 3NF decomposition of R. (10 points) 
+
+
+\section*{Implementation}
+In this part, please design a schema corresponding to the ER Diagram that we drew in Lab 4. Then, write the code to create that schema in PostgreSQL. Place the code in your submission using the name $table.sql$. (45 points)
+
+\section*{Description}
+\begin{enumerate}
+    \item The due date of this assignment is October 23rd, 11:55 PM. Late submission policy can be found on the course outline.
+    \item You are expected to submit your solution for all of the assignments, then the maximum three scores will be calculated.
+    \item Please include your answer to the first part of the assignment (Q1 to Q7) in a PDF file. It can be handwritten, but make sure it is easily readable.
+    \item Please upload your submission as Lastname\_Firstname\_StudentID.zip on Brightspace.
+\end{enumerate}
+
+\end{document}

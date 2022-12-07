@@ -1,0 +1,98 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Final Project}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section*{ }
+Imagine that we are responsible for an e-banking application. We have decided to handle its database using PostgreSQL. This application logs user data, account information, and transactions. The explanation of the requirements for your implementation comes in the following paragraphs.
+
+\section*{Functionalities}
+\begin{itemize}
+    \item \textbf{Banking}\\
+    Users can control their accounts using our application i.e. their incoming and outgoing transactions, total balance, etc.
+    
+    \item \textbf{Clients}\\
+    First, each client enters data fields such as first name, last name, user\_id, at least one phone number, and at least one address. Also, the client chooses a password that we should store. 
+
+    \item \textbf{Accounts}\\
+    Each account has an ID, total balance, account type (checking, saving, etc.) and the number of cosigners. The number of co-signers can be fewer than the number of account owners. For example, two people can have a joint account with one required signer. That means that each individual can make changes to the account on behalf of both of them. Each client can have access to different accounts under certain roles (sign, view, pay). Remember that each account can have multiple roles with respect to an account.
+    Also, each client can have multiple accounts. To log the information about transactions, we need to store the amount, type (withdrawal or deposit), time, and a note.
+
+    \item \textbf{Statements}
+    Each statement has a unique ID, a note, initiator (who is a client), "From" account (source), total amount, and a couple of transactions. Each transaction has a "To" account and amount of money involved. To calculate the total amount for a statement, we have to add the amount of each transaction.
+    Each client with sign permission on an account can sign the statements of that account as the source. When a statement reaches the minimum number of signatures, a user with "pay" role (who is not necessarily the initiator) will confirm the statement. Before then, the signers can decline their signatures or the initiator might edit the statement as well.
+
+    \item \textbf{**} Remember that it is up to you to insert a sufficient number of rows in each table to make the logging phase work properly.
+    
+\end{itemize}
+
+\section*{Design}
+\begin{enumerate}
+    \item List all the entities in your application and determine if they are weak or strong entities. For weak entities, mention their corresponding strong entity.
+
+    \item For each entity, list all attributes, their type, and their options for the value, default value, or other explanations (if applicable). Also, the primary keys and foreign keys should be determined. For the foreign keys you should mention the reference, too. 
+    
+    \item Draw the final version of your ERD containing all the entities and the cardinalities of the relationships.
+
+    \item Explain how you maintained the normal form in your design and the trade off you might have made to enhance the performance.
+
+\end{enumerate}
+
+\section*{Logging}
+You can create stored procedures or functions to parameterize these queries.
+\begin{enumerate}
+    \item Show the name of clients who have a "sign" role on at least one account.
+    \item Show the list of accounts with fewer required signatures than the signers.
+    \item Show the list of every statement that is confirmed.
+    \item Show the list of all transactions to a certain account that is not paid.
+    \item Show the list of all declined signatures of a certain client.
+    \item Show the list of all of the accounts that two certain clients have in common.
+    \item Show the list of all statements that a certain client can sign.
+    \item Show the list of every transaction that is initiated by a certain user, but the person does not have the "sign" permission on it.
+    \item Show the list of every deposit in a certain account that is more than a certain amount.
+\end{enumerate}
+
+\section*{Operation}
+\begin{enumerate}
+    \item Adding a user.
+    \item Adding an account.
+    \item Add, edit, or remove the access level of a certain user to a certain account.
+    \item Create a statement.
+    \item Edit or remove a statement.
+    \item Sign or unsign a statement.
+    \item Pay a statement.
+    \item Add incoming and outgoing transactions to an account.
+\end{enumerate}
+
+\section*{Notes}
+\begin{itemize}
+    \item After each money transfer, there are two accounts to be updated, the sender and the receiver.
+    \item Before executing an operation (Sign, unsign, pay, create, and edit) on an account, it should be evaluated to make sure that is valid. Statements with a sufficient number of signatures can be paid. Once a statement is paid, it cannot be unsigned. When a statement is signed by at least one person, it will not be edited but can be removed. Also, when the transactions inside a statement change, total amount should be updated. You can use \textit{triggers} and \textit{functions}.
+    \item Store the history of all operations on an account including sign, unsign, pay and initiation.
+    \item Store the log of all changes to the roles of each client.
+    \item Store the last time the tables are edited.
+    \item You should create backup tables if applicable to make accidental deletions reversible.
+    \item You should avoid redundancy in your implementation unless you explain the necessity.
+    \item You should automate the loggings using triggers.
+    \item Keep in mind to use Views, Functions, and triggers when applicable since using the right tools and commands has a share in your grade.
+    \end{itemize}
+    \section*{Bonus}
+    \begin{itemize}
+    \item If you manage to create a Django project to connect and work with this database as an interface, you can get up to 10\% bonus on your final score for this course. 
+    \end{itemize}
+    
+    \section*{Description}
+\begin{enumerate}
+    \item The due date of this assignment is on December 9th, 11:55 PM. Late submission policy can be found on the course outline.
+    \item You are expected to submit a report that explains every little detail about your implementation.
+    The report itself has 15 marks whereas the code has 10. As a result, you should not rely on the examiners to discover the features of your project unless you elaborate on them in your report.
+    \item Please try to sort your scripts into multiple files for creating tables, inserting instances, handling the functions and triggers, etc. and name the files accordingly.
+    \item Please put your code implementation in a folder, without the database, cached, or migration files. There should be (.py) and/or (.sql) files in your submission.
+    \item Please upload your submission as Lastname\_Firstname\_StudentID.zip on Brightspace.
+\end{enumerate}
+\end{document}

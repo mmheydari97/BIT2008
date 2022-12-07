@@ -1,0 +1,61 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Assignment 3}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section*{Python and Django}
+\question Please explain what a design pattern is, then elaborate on the MTV design pattern used by Django. (10 points)
+
+
+\question Please explain the difference in debugging between a programming language that uses an interpreter and a compiler. (5 points)
+
+\question Name 4 collection data types in Python explaining their differences. (10 points)
+
+\question Please explain 4 pillars of object-oriented programming and their implementation in Python. (20 points)
+
+
+\section*{Implementation}
+In this part, we create a bookkeeping application. Please make sure to implement the following steps: (55 points)
+\begin{enumerate}[label=\roman*.]
+    \item Create a Django project and make sure it uses PostgreSQL as the database.
+    \item Add a main app to your project.
+    \item Implement this schema in your app:
+    \begin{itemize}
+        \item Book(title, author, publish\_year, edition)
+        \item Member(name, address, phone\_number)
+        \item Booking(member, book, expiration\_date)
+    \end{itemize}
+    It is up to you to choose the primary keys.
+    \item Make it possible to create instances of your models inside the admin panel.
+    \item Implement following functionalities:
+    \begin{itemize}
+        \item The root of your application should show a default welcome message via \textit{HttpResponse}.
+        \item There should be three \textit{ListView}s to list all of the records in each model.
+        \item Your booking template should have a button that redirects to a form.
+        \item Use \textit{CreateView} to implement the form mentioned above that handles new bookings.
+        \item After the booking is done you should redirect the user to the list of bookings.
+        \item If a book or member is removed, the corresponding records in the booking table should be removed.
+        \item Imagine we have unlimited inventory for the books listed.
+        \item Each member should have at most one active booking.
+        \item Your app should not take invalid expiration\_dates. That includes dates that are already gone, or expiration dates sooner than the existing booking for a member.
+        \item However, you should make it possible to extend an active booking.
+        \item Extended bookings should not take a new row, but you should update the expiration date of existing row.
+        \item You are not expected to implement other details about the business logic.
+    \end{itemize}
+\end{enumerate}
+\newpage
+\section*{Description}
+\begin{enumerate}
+    \item The due date for this assignment is November 28th, 11:55 PM. Late submission policy can be found on the course outline.
+    \item You are expected to submit your solution for all of the assignments.
+    \item Please include your answer to the first part of the assignment (Q1 to Q4) in a PDF file. It can be handwritten, but make sure it is easily readable.
+    \item Please put your code implementation in a folder, without the database, cached, or migration files. Export your database to a script and name it \textit{table.sql}.
+    \item Please upload your submission as Lastname\_Firstname\_StudentID.zip on Brightspace.
+\end{enumerate}
+
+\end{document}

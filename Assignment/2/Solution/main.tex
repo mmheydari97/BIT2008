@@ -1,0 +1,124 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Assignment 2}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section*{Entity Relationship Model \& Normalization}
+\question A weak entity set is one whose existence depends on another entity, called its identifying entity. Instead of associating a primary key with a weak entity, we use the identifying entity, along with auxiliary attributes called discriminator to uniquely identify a weak entity.
+
+
+\question
+\fig{0.9}{Q2.png}{}{ }
+
+\question 
+There are various solutions to this question including:
+\begin{itemize}
+    \item $A\rightarrow E$ and $E\rightarrow C$ give $A \rightarrow C$ by transitivity.
+    \item $A \rightarrow B$ and $A \rightarrow C$ give $A \rightarrow BC$ by union.
+    \item $A \rightarrow BC$ and $BC\rightarrow DE$ give $A \rightarrow DE$ by transitivity.
+    \item $A \rightarrow B$, $E \rightarrow C$, and $AEF\rightarrow G$ give $BCF \rightarrow G$ by pseudo-transitivity.
+ 
+\end{itemize}
+
+\question The closure of (EFH) is calculated as below:
+\begin{itemize}
+    \item $(EFH)^+ = EFH$, initial step.
+    \item $(EFH)^+ = EFGH$ using functional dependency 1.
+    \item $(EFH)^+ = EFGHIJ$ using functional dependency 2.
+    \item $(EFH)^+ = EFGHIJKL$ using functional dependency 3.
+    \item $(EFH)^+ = EFGHIJKLM$ using functional dependency 4.
+    \item $(EFH)^+ = EFGHIJKLMN$ using functional dependency 5.
+\end{itemize}
+We conclude that $EFH$ is a superkey because its closure covers all of the attributes. After we check its subsets, we realize that none of them is a superkey. Consequently, $EFH$ is a candidate key.
+
+\question First we decompose right-hand side of functional dependencies $F= \{A\rightarrow B, A\rightarrow C, \newline B\rightarrow A, B\rightarrow C, C\rightarrow A, C\rightarrow B\}$. We find that there are no extraneous attributes.
+Then, we remove redundant functional dependencies. $B\rightarrow C$ and $C\rightarrow A$ imply $B\rightarrow A$ so we can remove it. Also $A\rightarrow B$ and $B\rightarrow C$ give $A\rightarrow C$ so it is redundant. Finally, $C\rightarrow A$ and $A\rightarrow B$ imply $C\rightarrow B$ so we remove it. As a result, $F_c=\{A\rightarrow B, B\rightarrow C, C\rightarrow A\}$.
+
+\question AB is a candidate key (why?) so the dependency $D\rightarrow E$ violates BCNF. As a result, we decompose the relations to $\{D, E\}$ and $\{A, B, C, D\}$. However, for two more functional dependencies $A\rightarrow C$, and $B\rightarrow D$, the left-hand side is only part of our candidate key, so we decompose $ABCD$ into $\{A, C\}$, $\{B, D\}$, and $\{A, B\}$. Consequently, we end up having 4 relations in our decomposition. Since we can still retrieve $AB\rightarrow CD$ the decomposition is dependent-preserving.  
+
+\question
+Although one can often skip ahead to some of the conclusions or combine steps, these solutions are very systematic so that you can see the full pattern.
+\begin{enumerate}[label=(\Alph*)]
+    \item Compute all keys for R.
+    \begin{itemize}
+        \item Examining all subsets of attributes would be very time-consuming because there are $2^8$ of them. With some careful reasoning we can speed up the process by avoiding computing many closures.
+        \item On inspection, we can see that $A^+=ACDBEFHG$, which means that A is a key and that no superset of A can be a key.
+        \item Also, $CF^+=CFAHGDBE$, which means that CF is a key and no superset of CF can be a key. (C alone or F alone could be part of a key, but CF cannot.)
+        \item Therefore, the only keys are A and CF.
+    \end{itemize}
+    \item Compute $F_c$. For convenience we sort them alphabetically.
+    \begin{itemize}
+        \item To find a minimal basis, we'll first eliminate redundant FDs. The order in which we do this will affect the results we get, but we will always get a minimal basis.
+        \item We will simplify to singleton right-hand sides before doing so, since it may be possible to eliminate some but not all of FDs that we get from one of our original FDs. We'll also number the resulting FDs for easy reference, and call this set \\S1:
+        \begin{enumerate}[label=\arabic*]
+            \item $A\rightarrow C$
+            \item $A\rightarrow D$
+            \item $ACF\rightarrow G$
+            \item $AD\rightarrow B$
+            \item $AD\rightarrow E$
+            \item $AD\rightarrow F$
+            \item $BCG\rightarrow D$
+            \item $CF\rightarrow A$
+            \item $CF\rightarrow H$
+            \item $CH\rightarrow G$
+            \item $D\rightarrow B$
+            \item $H\rightarrow D$
+            \item $H\rightarrow E$
+            \item $H\rightarrow G$
+        \end{enumerate}
+        \item Now we'll look for redundant FDs to eliminate. Each row in the table below indicates which of the 14 FDs we still have on hand as we consider removing the next one. Of course, as we do the closure test to see whether we can remove $X\rightarrow Y$, we can't use $X\rightarrow Y$ itself, so an FD is never included in its own row.
+        \fig{0.9}{Q71.png}{}{}
+        \item Let's call the remaining FDs 
+        \\S2:
+        \begin{enumerate}[label=\arabic*]
+            \item $A\rightarrow C$
+            \item $A\rightarrow D$
+            \item 
+            \item 
+            \item 
+            \item $AD\rightarrow F$
+            \item $BCG\rightarrow D$
+            \item $CF\rightarrow A$
+            \item $CF\rightarrow H$
+            \item 
+            \item $D\rightarrow B$
+            \item $H\rightarrow D$
+            \item $H\rightarrow E$
+            \item $H\rightarrow G$
+        \end{enumerate}
+        \item Now let's try reducing the LHS of any FDs with multiple attributes on the LHS. For these closures, we will close the entire set S2, including even the FD being considered for simplification. For functional dependency 6, $A^+=ACDF$ that includes $D$ inside it. so we can reduce the LHS to A. Finally, FD2 is also redundant and can be implied using FD1 and FD6 (union), then, FD9, and FD12 (transitivity). We have \\S3:
+        \begin{enumerate}[label=\arabic*]
+            \item $A\rightarrow C$
+            \item 
+            \item 
+            \item 
+            \item 
+            \item $A\rightarrow F$
+            \item $BCG\rightarrow D$
+            \item $CF\rightarrow A$
+            \item $CF\rightarrow H$
+            \item 
+            \item $D\rightarrow B$
+            \item $H\rightarrow D$
+            \item $H\rightarrow E$
+            \item $H\rightarrow G$
+        \end{enumerate}
+        \item We have $F_c=\{A\rightarrow CF, BCG\rightarrow D, CF\rightarrow AH, D\rightarrow B, H\rightarrow DEG\}$
+    \end{itemize}
+    \item Using $F_c$ we employ the 3NF algorithm to obtain a lossless and dependency-preserving decomposition of relation R into a collection of relations that are in 3NF.
+    \begin{itemize}
+        \item The set of relations that would result would have these attributes:\\
+        $R_1(A, C, F), R_2(B, C, D, G), R_3(A, C, F, H), R_4(B, D), R_5(D, E, G, H)$
+        \item Since the attributes $BD$ occur within $R_2$, we do not need to keep the relation $R_3$. Similarly, since the attributes $ACF$ occur in $R_3$, we do not need to keep the relation $R_1$.
+        \item $A$ is a key of R, so there is no need to add another relation that includes a key.
+        \item So the final set of relations is:\\
+        $R_2(B, C, D, G), R_3(A, C, F, H), R_5(D, E, G, H)$
+    \end{itemize}
+\end{enumerate}
+
+\end{document}

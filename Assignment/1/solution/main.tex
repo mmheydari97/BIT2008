@@ -1,0 +1,51 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Assignment 1}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section*{Relational Algebra}
+% Generally, if a relation $R$ has $n$ attributes namely, $(A_1, A_2,... , A_n)$, and we have $k$ number of those attributes taken as candidate keys, how many superkeys does the relation $R$ have? (5 points)
+\question We should include at least one candidate key in our superkey. To do so, we have k options which is formally shown by $\begin{pmatrix}k\\ 1\end{pmatrix}$. In that superkey other non-prime attributes may or may not exist (two options). As a result we can show them by $2^{n-k}$. Consequently, we have $\begin{pmatrix}k\\ 1\end{pmatrix}2^{n-k}\:$ superkeys with only one prime attribute. We can use a combination of two prime attributes with an arbitrary number of nonprime attributes. With the same logic, they will sum up to $\:\begin{pmatrix}k\\ \:2\end{pmatrix}2^{n-k}\:=k\left(k-1\right)2^{n-k}$ options. We can continue the same process all the way to using all the prime attributes which has $\begin{pmatrix}k\\ \:k\end{pmatrix}2^{n-k}\:=2^{n-k}$ options. The way that we counted different options do not have overlaps so we can sum them to have the solution.
+\[\sum _{i=1}^k\left(\begin{pmatrix}k\\ \:i\end{pmatrix}2^{n-k}\right)=2^{n-k}\sum ^k_{i=1}\begin{pmatrix}k\\ \:\:i\end{pmatrix}=2^{n-k}\left(2^k-1\right)\:=\:2^n-2^{n-k}\]
+We can interpret the solution in another way. We can take any subset of attributes as a superkey except those with no prime-attributes. As a result, we have $2^n$ possible subsets, and if we remove all of the prime attributes and compute their subsets, we will have $2^{n-k}$ possibilities. Finally, we can take undesirable subsets of attributes out of the total number of possibilities, which leads to the same answer.
+\question 
+% Please specify the truth of each statement including your reason. (15 points)
+\begin{enumerate}
+    \item $\sigma_\theta (R \cup S) = \sigma_\theta (R) \cup \sigma_\theta (S)$ is always valid. 
+    \fig{0.6}{Q21.png}{}{ }
+    \\Let $X = \sigma_\theta(R\cup S)$, where $\theta$ is a set of conditions to apply to the argument of the operation. Without loosing the generality, we denote the all the records in the $R - S$ with $A$, $S-R$ with $B$, and $R\cap S$ with $C$. These records clearly do not overlap. So if the records in $S\cup R$ satisfy the condition set $\theta$ are $X=\{x_1, x_2, ..., x_i\}$, we can order them like $\{a_1, ..., a_j, b_1, ..., b_k, c_1, ..., c_l\}$. Let us denote $A'=\{a_1, ..., a_j\}$, $B'=\{b_1, ..., b_k\}$, $C'=\{c_1, ..., c_l\}$. Recall that we can shuffle the records however we want.
+    \[ \forall x \in X, x\in (A'\cup B' \cup C')\]
+    \[x \in (A'\cup B') \cup (B' \cup C')\]
+    \[x\in \sigma_\theta(R) \cup \sigma_\theta(S)\]
+    \item $\Pi_L (\sigma_\theta (S)) = \sigma_\theta (\Pi_L(S))$ is not always valid. \\Clearly if $\theta$ contains conditions on attributes not listed in L, then we cannot swap selection and projection operators.
+    \item $\sigma_\theta(R)-S = \sigma_\theta(R-S)$ is always valid.
+    \fig{1}{Q23.png}{}{}
+\end{enumerate}
+
+\question Assume that we have manged to store the data of a transportation system as the relations below:
+\begin{itemize}
+    \item Company(\underline{comp\_id}, name)
+	\item Trip(\underline{trip\_id}, date, origin, dest, comp\_id, duration)
+    \item Passenger(\underline{pass\_id}, name)
+    \item Pass\_in\_Trip(\underline{trip\_id}, \underline{pass\_id},
+\end{itemize}
+
+Please write each of these queries using relational algebra. (15 points)
+\begin{enumerate}
+    \item The date of every trip starting from "Ottawa".
+    \[\Pi _{date}\left(\sigma _{origin='Ottawa'}\left(Trip\right)\right)\]
+    \item The list of every city that a passenger named "Alex" had a trip to.
+    \[\Pi _{dest}\left(Trip\bowtie \:\Pi \:_{trip\_id}\left(Pass\_in\_Trip\bowtie \:\:\Pi \:\:_{pass\_id}\left(\sigma \:\:_{name='Alex'}\left(Passenger\right)\right)\right)\right)\]
+    \item The ID of every passenger who has a trip after 2022-08-08, taking less than 12 minutes.
+    \[\Pi _{pass\_id}\left(Pass\_in\_Trip\:\bowtie \Pi _{trip\_id}\left(\sigma _{date>'2022-08-08'\:\wedge \:duration\:>12}\left(Trip\right)\right)\right)\]
+\end{enumerate}
+
+\question \[\Pi_{s\_name}(\sigma_{Producer.s\_city = P2.s\_city}(Producer \times \rho_{P2}(\Pi_{s\_city}(\sigma_{s\_id=8}(Producer)))))\]
+This query returns the name of producers who are active in the same city as the producer with ID 8.
+
+\end{document}

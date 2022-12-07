@@ -1,0 +1,44 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Assignment 3}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section*{Python and Django}
+\question
+In software engineering, a software design pattern is a general reusable solution to a problem that occurs frequently within a given context in software design. It is not a finished design that can be transformed directly into source or machine code. Rather, it is a description or template of how to solve a problem that can be used in many different situations. Design patterns are formalized best practices that the programmer can use to solve common problems when designing an application or system.\cite{design}
+
+The MVT (Model View Template) is a software design pattern. It is a collection of three important components Model View and Template. The Model helps to handle database. It is a data access layer that handles the data.
+The template is a presentation layer which handles the user interface part completely. The View is used to execute the business logic and interact with a model to carry data and renders a template. \cite{mvt}
+
+\question The difference between an interpreted and a compiled language lies in the result of the process of interpreting or compiling. An interpreter produces a result from a program, while a compiler produces a program written in assembly language.
+In a compiled language, the compilation process itself can guarantee that our code does not have certain errors. But we cannot be so sure about it when it comes to an interpreted language where the code is executed line by line and we can even see some results before we face an error.
+
+\question 
+\begin{itemize}
+    \item \textbf{List}: It is defined using square brackets and can contain a set of elements with any type of value.
+    \item \textbf{Tuple}: It is defined using parentheses. Tuples cannot be changed after initialization meaning that we cannot add or remove elements.
+    \item \textbf{Set}: It is defined by using curly brackets, and only its unique elements will be saved after initialization.
+    \item \textbf{Dictionary}: It is similar to a set but, it takes key-value pairs separated by colons.
+\end{itemize}
+
+\question 
+\begin{itemize}
+    \item \textbf{Abstraction}: The process by which data and functions are defined in such a way that only essential details can be seen and unnecessary implementations are \textbf{hidden} is called Data Abstraction. For example, when we are provided with a class to handle \textit{Person} entity, and we want to develop a class based on it to handle \textit{Student} entity, we do not care about every detail of the implementation of \textit{Person}. Instead, we focus on what needs to be changed particularly in that class and expect the functionalities in common to work just fine.
+    
+    \item \textbf{Encapsulation}: Python allows the developers and users to think of a class as a capsule. It means that sometimes, we have to interact with the class to retrieve or manipulate its data instead of doing that directly. For example, if we want to interact with the \textit{Student} class to change the ID, we had better use a \textit{set\_id} method (if implemented) as a black box, rather than changing the attribute manually. The attributes also have access modifiers such as \textbf{public}, \textbf{private}, and \textbf{protected}.
+
+    \item \textbf{Inheritance}: Inheritance allows us to define a class that inherits the methods and properties from another class. The parent class is the class that is inherited, also called the base class. The child class is the class that inherits from another class, also called a derived class.
+    
+    \item \textbf{Polymorphism}: In Python, polymorphism lets us define methods in the child class that have the same name as the methods in the parent class. In inheritance, the child class inherits the methods from the parent class. However, it is possible to modify a method in a child class that it has inherited from the parent class. This is particularly useful in cases where the method inherited from the parent class does not quite fit the child class. In such cases, we reimplement the method in the child class. This process of re-implementing a method in the child class is known as \textbf{Overriding}. For example, if you override a method \textit{foo} for the \textit{Student} class, your \textit{Student} instances can call the \textit{foo} method from both classes, making the instance polymorphic.
+    
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{citations}
+
+\end{document}

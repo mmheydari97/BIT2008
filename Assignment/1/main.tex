@@ -1,0 +1,125 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\date{Fall 2022}
+\title{Assignment 1}
+
+\graphicspath{{./pics/}}
+
+\begin{document} \maketitle
+
+\section*{Relational Algebra}
+\question Generally, if a relation $R$ has $n$ attributes, namely $ (A_1, A_2,... , A_n)$, and we have $k$ number of those attributes taken as candidate keys, how many superkeys does the relation $R$ have? (5 points)
+
+
+\question Please specify the truth of each statement and include your reason. (15 points)
+\begin{enumerate}
+    \item $\sigma_\theta (R \cup S) = \sigma_\theta (R) \cup \sigma_\theta (S)$ is always valid.
+    \item $\Pi_L (\sigma_\theta (S)) = \sigma_\theta (\Pi_L(S))$ is always valid.
+    \item $\sigma_\theta(R)-S = \sigma_\theta(R-S)$ is always valid.
+\end{enumerate}
+
+\question Assume that we have manged to store the data of a transportation system as the relations below:
+\begin{itemize}
+    \item Company(\underline{comp\_id}, name)
+	\item Trip(\underline{trip\_id}, date, origin, dest, comp\_id, duration)
+    \item Passenger(\underline{pass\_id}, name)
+    \item Pass\_in\_Trip(\underline{trip\_id}, \underline{pass\_id},
+\end{itemize}
+
+Write each of these queries using relational algebra. (15 points)
+\begin{enumerate}
+    \item The date of every trip starting from "Ottawa".
+    \item The list of every city that a passenger named "Alex" had a trip to.
+    \item The ID of every passenger who has a trip after 2022-08-08, which takes less than 12 minutes.
+\end{enumerate}
+
+\question Having the relations below for a retail management system:
+\begin{itemize}
+    \item Producer(\underline{s\_id}, s\_name, s\_city)
+    \item Product(\underline{p\_id}, p\_name, p\_color)
+    \item Produce(\underline{s\_id}, \underline{p\_id})
+\end{itemize}
+Please interpret the result of the following query. (5 points)
+
+    $\Pi_{s\_name}(\sigma_{Producer.s\_city = P2.s\_city}(Producer \times \rho_{P2}(\Pi_{s\_city}(\sigma_{s\_id=8}(Producer)))))$
+
+
+\section*{Implementation}
+In this part, we assume that we are responsible for managing the database of an online store. This database stores information from customers, products, and shopping bags. Additionally, customers are allowed to rate the products. Basically, you are expected to do these objectives using PostgreSQL.
+\begin{enumerate}
+    \item Creating the schema (25 points)
+    \item Importing the instances (5 points)
+    \item Executing the queries (30 points)
+\end{enumerate}
+
+\subsection*{Creating the schema}
+Please create a database with the schema described below. It is up to you to define the superkeys, foreign keys, and the datatype of the attributes for each table.
+
+\textbf{User Table:}
+\begin{itemize}
+    \item user\_id: this field is a unique numerical ID assigned to each user.
+    \item name: this filed consists the name of a user.
+    \item address: this field only includes the street address of a user.
+    \item phone: this field include the phone number of a user.
+\end{itemize}
+
+\textbf{Product Table:}
+\begin{itemize}
+    \item product\_id: this field is a unique numerical ID assigned to each product.
+    \item name: this field consists the name of a product.
+    \item category\_id: this field holds the category ID of each product.
+    \item price: this field shows the unit price of a product.
+\end{itemize}
+
+\textbf{Order Table:}
+\begin{itemize}
+    \item order\_id: this field is a numerical ID assigned to each order.
+    \item user\_id: this field holds the user ID of the person who has submitted an order.
+    \item product\_id: this field holds the ID of each product included in an order.
+    \item quantity: this field shows how many units of a certain product there are in an order.
+    \item shipping: this field shows the shipping status of a record.
+    \item timestamp: this field stores the time and date when an order is placed.
+\end{itemize}
+
+\textbf{Category Table:}
+\begin{itemize}
+    \item category\_id: this field holds a unique ID assigned to each category.
+    \item name: this field contains the name of a category.
+\end{itemize}
+
+\textbf{Rating Table:}
+\begin{itemize}
+    \item user\_id: this field specifies the user who has done the rating.
+    \item product\_id: this field specifies the product to be rated.
+    \item rate: this field shows the score given to a product from 0 to 5.
+    \item timestamp: this field stores the time and date when the rating is submitted.
+\end{itemize}
+
+\subsection*{Importing the instances}
+It is up to you to import enough records to make sure that the queries will make sense and show meaningful results.
+\subsection*{Executing the queries}
+\begin{enumerate}
+    \item The list of every product without a rating assigned to them.
+    \item The list of user names who have ordered more than three times from the products in the "Sport" category.
+    \item The list of every product with an average rating above 4.
+    \item The list of every product that has been sold above \$100 in total.
+    \item Number of users who have spent more than \$100 in 2021-11-25.
+    \item The name and total spending of the user with the ID of 5.
+    \item The details of the best-selling product.
+    \item The name of the best-selling category.
+    \item The name of the second user with the most number of submitted ratings.
+    \item The name of the user with the longest gap between their first and last ratings.
+\end{enumerate}
+
+\section*{Description}
+\begin{enumerate}
+    \item The due date of this assignment is on September 25th, 11:55 PM. Late submission policy can be found on the course outline.
+    \item You are expected to submit your solution for all of the assignments, then the maximum three scores will be calculated.
+    \item Please include your answer to the first part of the assignment (Q1 to Q4) in a PDF file. It can be handwritten, but make sure it is easily readable.
+    \item Please create a file named Table.sql for the first part of the implementation (Creating the schema).
+    \item Please create a file named Data.sql for the second part of the implementation (Importing the instances).
+    \item Please create a file named Query.sql for the third part of the implementation (Executing the queries).
+    \item Please upload your submission as Lastname\_Firstname\_StudentID.zip on Brightspace.
+\end{enumerate}
+\end{document}
