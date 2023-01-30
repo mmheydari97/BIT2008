@@ -1,0 +1,78 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\title{Final Exam}
+\graphicspath{{./pics/}}
+\date{Dec 14, 2022}
+\begin{document} \maketitle
+\section*{Multiple choice Questions}
+Please select the correct answer to each question. (1 point each)
+\question What Python collection takes unique elements?
+\begin{enumerate}[label=\alph*)]
+    \item Array 
+    \item Tuple
+    \item List
+    \item Set
+\end{enumerate}
+
+\question What JOIN process is always reversible?
+\begin{enumerate}[label=\alph*)]
+    \item Right Join
+    \item Left Join
+    \item Outer Join
+    \item Inner Join
+\end{enumerate}
+
+\question What SQL operator is applied after aggregation?
+\begin{enumerate}[label=\alph*)]
+    \item SELECT
+    \item HAVING
+    \item FROM
+    \item WHERE
+\end{enumerate}
+
+\question What Python operator can take an "else:" block ?
+\begin{enumerate}[label=\alph*)]
+    \item if
+    \item for
+    \item while
+    \item all three
+\end{enumerate}
+
+\question What part of a Django project manages the routing of the project?
+\begin{enumerate}[label=\alph*)]
+    \item manage.py
+    \item urls.py
+    \item wsgi.py
+    \item asgi.py
+\end{enumerate}
+
+\section*{Short Answer Questions}
+Please determine the truth of the statements below. You should explain why any of the statements is wrong then correct it.
+\question In PostgreSQL, we can store numbers in the format of 1234.56 in a NUMERIC(4,2) data type. (2 points)
+\question The select operator ($\sigma$) in relational algebra, works the same as the SELECT command in PostgreSQL. (2 points)
+\question Django engine does not process (.html) files and shows them as is. (2 points)
+\question ER diagrams show the tables that exist in a database. (2 points)
+\question Minimal candidate keys are called superkeys in database theory. (2 points)
+\question Many-to-Many relationships can involve more than two entity sets. (Bonus 2 points)
+
+\section*{Comprehensive Questions}
+Please answer following questions in detail.
+\question What are the main components of the MVT design pattern, and how can using it help us develop a solution. (8 points)
+\question What is the advantage of using normal forms in a schema design, and why would we decide to violate a normal form? (8 points)
+\question Based on the table below, mention one lossless decomposition and one lossy decomposition. For each decomposition, you should try to rebuild the initial table to prove your point. (6 points) 
+\begin{table}[!htp]
+    \centering
+    \begin{tabular}{|c|c|c|}
+         \hline
+         A & B & C\\
+         \hline
+         a1 & b1 & c1\\
+         a1 & b2 & c2\\
+         \hline
+    \end{tabular}
+    \caption{Table of R=(A, B, C)}
+    \label{tab:my_label}
+\end{table}
+\question Explain how we perform aggregation in MongoDB mentioning three of its operators. You do not need to write precise syntax. (8 points)
+\end{document}

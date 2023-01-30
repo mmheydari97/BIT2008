@@ -1,0 +1,105 @@
+\documentclass{homework}
+\class{BIT2008A/ITEC2000A: Multimedia Data Management}
+\author{}
+\title{Final Exam}
+\graphicspath{{./pics/}}
+\date{Dec 14, 2022}
+\begin{document} \maketitle
+\section*{Multiple choice Questions}
+Please select the correct answer to each question. (1 point each)
+\question What Python collection takes unique elements?
+\begin{enumerate}[label=\alph*)]
+    \item  
+    \item 
+    \item 
+    \item Set
+\end{enumerate}
+
+\question What JOIN process is always reversible?
+\begin{enumerate}[label=\alph*)]
+    \item 
+    \item 
+    \item Outer Join
+    \item 
+\end{enumerate}
+
+\question What SQL operator is applied after aggregation?
+\begin{enumerate}[label=\alph*)]
+    \item 
+    \item HAVING
+    \item 
+    \item 
+\end{enumerate}
+
+\question What Python operator can take an "else:" block ?
+\begin{enumerate}[label=\alph*)]
+    \item 
+    \item 
+    \item 
+    \item all three
+\end{enumerate}
+
+\question What part of a Django project manages the routing of the project?
+\begin{enumerate}[label=\alph*)]
+    \item 
+    \item urls.py
+    \item 
+    \item 
+\end{enumerate}
+
+\section*{Short Answer Questions}
+Please determine the truth of the statements below. You should explain why any of the statements is wrong then correct it.
+\question In PostgreSQL, we can store numbers in the format of 1234.56 in a NUMERIC(4,2) data type. 
+False. It should be NUMERIC(6,2) because the first argument controls total number of digits and the second one controls the precision.
+
+\question The select operator ($\sigma$) in relational algebra, works the same as the SELECT command in PostgreSQL. 
+False. SELECT deals with columns but ($\sigma$) deals with conditions to return rows.
+
+
+\question Django engine does not process (.html) files and shows them as is.
+False. Django engine looks for certain tags in HTML files and replaces them with data to provide the page content.
+
+\question ER diagrams show the tables that exist in a database.
+False. ER diagram shows the entities and relationships in the design process. They may change during implementation.
+
+\question Minimal candidate keys are called superkeys in database theory.
+False. Minimal superkeys are called candidate keys not the other way around.
+
+\question Many-to-Many relationships can involve more than two entity sets.
+False. All of these cardinality attributes such as many-to-one, many-to-many, ect. only involve two entity sets.
+
+\section*{Comprehensive Questions}
+Please answer following questions in detail.
+\question What are the main components of the MVT design pattern, and how can using it help us develop a solution. (8 points)
+\begin{itemize}
+    \item M stands for the model and it interacts with the database
+    \item V stands for the view and it contains the functionalities (business logic) of a project.
+    \item T stands for the template and it includes the representation layer of a web project.
+\end{itemize}
+Using MVT design pattern makes it easier to scale up and manage the web projects.
+
+\question What is the advantage of using normal forms in a schema design, and why would we decide to violate a normal form? (8 points)
+Using normal forms prevents redundancy. As a result the database would take less storage, and its consistency and stability would be maintained easier.
+However, sometimes we prefer violating the normal form to persist a functional dependency or to avoid performing multiple joins on frequent queries. That will make our database more responsive, and reduce the execution time of certain queries.
+\question Based on the table below, mention one lossless decomposition and one lossy decomposition. For each decomposition, you should try to rebuild the initial table to prove your point. (6 points) 
+\begin{table}[!htp]
+    \centering
+    \begin{tabular}{|c|c|c|}
+         \hline
+         A & B & C\\
+         \hline
+         a1 & b1 & c1\\
+         a1 & b2 & c2\\
+         \hline
+    \end{tabular}
+    \caption{Table of R=(A, B, C)}
+    \label{tab:my_label}
+\end{table}
+Fig. \ref{ll} shows a lossless decomposition and Fig. \ref{ly} shows a lossy decomposition.
+As you can see, it is possible to reconstruct the relation from only from a lossless decomposition.
+\fig{0.5}{ll.png}{lossless decomposition.}{ll}
+\fig{0.5}{ly.png}{lossy decomposition.}{ly}
+
+\question Explain how we perform aggregation in MongoDB mentioning three of its operators. You do not need to write precise syntax. (8 points)
+There is a \textit{aggregate} function that takes an array of operators and executes those elements by order. We have \textit{group}, \textit{match}, and \textit{unwind} as three of the main components of MongoDB aggregation. We can determine the attributes of aggregation via \textit{group}, check for conditions before or after the aggregation using \textit{match}, and extract the inner elements of an array using unwind.
+\end{document}
